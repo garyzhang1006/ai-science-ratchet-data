@@ -1,0 +1,14 @@
+requests>=2.31
+pandas>=2.0
+numpy>=1.24
+scipy>=1.11
+statsmodels>=0.14
+lifelines>=0.27
+matplotlib>=3.7
+transformers>=4.44
+torch>=2.1
+accelerate>=0.30
+sentencepiece
+protobuf
+# GPU-only (Kaggle/chains step); not needed for scoring/analysis on CPU:
+# bitsandbytes>=0.43
