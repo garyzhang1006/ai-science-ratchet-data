@@ -80,12 +80,19 @@ def main():
 
     rows = []
     seen_g0 = set()
+    seen_rows = set()  # guards against duplicated chain rows reaching stats
+    n_dup = 0
     for cf in chain_files:
         for line in open(cf):
             r = json.loads(line)
             src = sources.get(r["pmid"])
             if src is None:
                 continue
+            row_key = (r["pmid"], r["model"], r["regime"], r["generation"])
+            if row_key in seen_rows:
+                n_dup += 1
+                continue
+            seen_rows.add(row_key)
             g0_key = (r["pmid"], r["model"], r["regime"])
             if g0_key not in seen_g0:
                 seen_g0.add(g0_key)
@@ -101,6 +108,9 @@ def main():
             if len(rows) % 200 == 0:
                 print(f"[score] {len(rows)} rows", flush=True)
 
+    if n_dup:
+        print(f"[score] WARNING: skipped {n_dup} duplicate chain rows "
+              f"(same pmid/model/regime/generation)", flush=True)
     df = pd.DataFrame(rows)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(args.out, index=False)

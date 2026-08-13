@@ -21,8 +21,10 @@ file is the time lock.
 - Depth: 10 generations per chain.
 - Regimes: neutral, conservative (exact prompt strings in `src/chains.py`).
 - Decoding: greedy (temperature 0) primary; temperature 0.7 sensitivity arm.
-- Strata: rct / obs / null, equal n, operational rules in
-  `src/fetch_abstracts.py` (`qualifies()`).
+- Strata: rct / obs / null, equal n, mutually exclusive with null-priority
+  (a null-tail abstract is always classed null regardless of which query
+  surfaced it); operational rules in `src/fetch_abstracts.py`
+  (`qualifies()`).
 - Abstract length gate: 150-450 words.
 
 ## Analysis
@@ -33,7 +35,9 @@ file is the time lock.
   is degenerate (< 1e-10). Two-sided tests; Holm correction across the five
   markers within each regime.
 - H2: Kaplan-Meier, event = first generation with core entailment < 0.5,
-  censored at depth 10; log-rank null vs non-null classes, per regime.
+  censored at the chain's own last observed generation (depth 10 for
+  complete chains); chains with no NLI measurement are excluded and
+  counted; log-rank null vs non-null classes, per regime.
 - H3: OLS of per-step differences on regime indicator, cluster-robust SEs
   (clustered on abstract); report reduction share and sign-flip check.
 

@@ -19,7 +19,10 @@ RE_CI = re.compile(
     r"\s*([-+−]?\d+(?:\.\d+)?)\s*(?:to|,|–|—|-)\s*([-+−]?\d+(?:\.\d+)?)",
     re.IGNORECASE,
 )
-RE_PERCENT = re.compile(r"([-+−]?\d+(?:\.\d+)?)\s*%")
+# Negative lookahead: "95% CI" / "95% confidence interval" is reporting
+# convention, not a study statistic, and must not count as retained.
+RE_PERCENT = re.compile(
+    r"([-+−]?\d+(?:\.\d+)?)\s*%(?!\s*(?:CI\b|confidence))", re.IGNORECASE)
 RE_ANY_NUM = re.compile(r"[-+−]?\d+(?:\.\d+)?")
 
 

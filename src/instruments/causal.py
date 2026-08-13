@@ -25,10 +25,13 @@ SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\[])")
 CAUSAL_VERBS = (
     r"cause[sd]?|caus(?:es|ing)|reduce[sd]?|reduc(?:es|ing)|"
     r"increase[sd]|increas(?:es|ing)|decrease[sd]|decreas(?:es|ing)|"
-    r"improve[sd]?|improv(?:es|ing)|prevent(?:s|ed)?|lower(?:s|ed)|"
-    r"raise[sd]|lead(?:s)?\s+to|led\s+to|result(?:s|ed)?\s+in|induce[sd]?|"
-    r"protect(?:s|ed)?\s+against|eliminate[sd]?|boost(?:s|ed)|"
-    r"enhance[sd]?|impair(?:s|ed)?|worsen(?:s|ed)?|slow(?:s|ed)"
+    r"improve[sd]?|improv(?:es|ing)|prevent(?:s|ed|ing)?|"
+    r"lower(?:s|ed|ing)|rais(?:es|ed|ing)|"
+    r"lead(?:s|ing)?\s+to|led\s+to|result(?:s|ed|ing)?\s+in|"
+    r"induc(?:es|ed|ing)|induce|"
+    r"protect(?:s|ed|ing)?\s+against|eliminat(?:es|ed|ing)|eliminate|"
+    r"boost(?:s|ed|ing)|enhanc(?:es|ed|ing)|enhance|"
+    r"impair(?:s|ed|ing)?|worsen(?:s|ed|ing)?|slow(?:s|ed|ing)"
 )
 BARE_AMBIG = r"lower|raise|slow|boost|increase|decrease"
 # Participle forms acting as adjectives ("associated with increased risk"):
@@ -65,9 +68,16 @@ RE_NEG = re.compile(NEG, re.IGNORECASE)
 _NEG_WINDOW = 40  # characters before the trigger scanned for negation
 
 
+# A clause boundary resets the negation scope: "There were no dropouts;
+# the treatment reduced anxiety" must not read the unrelated "no".
+RE_CLAUSE_BOUNDARY = re.compile(
+    r"[;:]|,\s*(?:and|but|while|whereas|although)\b", re.IGNORECASE)
+
+
 def _negated(sentence: str, start: int) -> bool:
     window = sentence[max(0, start - _NEG_WINDOW):start]
-    return bool(RE_NEG.search(window))
+    parts = RE_CLAUSE_BOUNDARY.split(window)
+    return bool(RE_NEG.search(parts[-1]))
 
 
 def _prev_word(sentence: str, start: int) -> str:

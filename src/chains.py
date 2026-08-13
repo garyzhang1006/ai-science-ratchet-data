@@ -5,8 +5,9 @@ generation g-1; generation 0 is the source abstract. Decoding is greedy
 (temperature 0) by default to isolate systematic drift from sampling
 variance; pass --temperature for the sensitivity arm.
 
-Writes JSONL incrementally and resumes safely: rerunning skips completed
-(pmid, model, regime) chains. Designed for a Kaggle T4 with 4-bit
+Writes JSONL incrementally and resumes at the generation level: rerunning
+continues each partial chain from its last written generation and text, so
+interrupted runs never duplicate rows. Designed for a Kaggle T4 with 4-bit
 quantization; also runs on any CUDA box.
 
 Usage (one model per 12h Kaggle session):
@@ -22,9 +23,13 @@ import time
 # Fix for HF Xet backend hangs on Kaggle.
 os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
-import torch  # noqa: E402
-from transformers import (AutoModelForCausalLM, AutoTokenizer,  # noqa: E402
-                          BitsAndBytesConfig)
+
+def _hf():
+    """Lazy import so chain_state() works on machines without torch."""
+    import torch
+    from transformers import (AutoModelForCausalLM, AutoTokenizer,
+                              BitsAndBytesConfig)
+    return torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 # Prompt prefixes; the abstract text is appended after a blank line.
 PROMPTS = {
@@ -43,6 +48,7 @@ PROMPTS = {
 
 
 def load_model(name: str, four_bit: bool = True):
+    torch, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig = _hf()
     tok = AutoTokenizer.from_pretrained(name)
     kwargs = {"torch_dtype": torch.float16}
     if four_bit and torch.cuda.is_available():
@@ -60,6 +66,7 @@ def load_model(name: str, four_bit: bool = True):
 
 
 def summarize(tok, model, text: str, regime: str, temperature: float) -> str:
+    import torch
     prompt = PROMPTS[regime] + text
     msgs = [{"role": "user", "content": prompt}]
     rendered = tok.apply_chat_template(
@@ -78,23 +85,24 @@ def summarize(tok, model, text: str, regime: str, temperature: float) -> str:
     return tok.decode(out[0][src_len:], skip_special_tokens=True).strip()
 
 
-def completed_chains(out_path: str, depth: int):
-    done = set()
+def chain_state(out_path: str):
+    """Per-(pmid, model, regime) resume state: (last_generation, last_text).
+    Generation-level, so a chain interrupted mid-run continues from its last
+    written generation instead of being regenerated (which would append
+    duplicate rows to the JSONL)."""
+    state = {}
     p = pathlib.Path(out_path)
     if not p.exists():
-        return done
-    counts = {}
+        return state
     for line in p.open():
         try:
             r = json.loads(line)
         except json.JSONDecodeError:
             continue
         key = (r["pmid"], r["model"], r["regime"])
-        counts[key] = max(counts.get(key, 0), r["generation"])
-    for k, g in counts.items():
-        if g >= depth:
-            done.add(k)
-    return done
+        if key not in state or r["generation"] > state[key][0]:
+            state[key] = (r["generation"], r["text"])
+    return state
 
 
 def main():
@@ -111,9 +119,11 @@ def main():
 
     abstracts = [json.loads(l) for l in open(args.abstracts)]
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    done = completed_chains(args.out, args.depth)
-    print(f"[chains] {len(done)} chains already complete; "
-          f"{len(abstracts) * len(args.regimes) - len(done)} to run",
+    state = chain_state(args.out)
+    n_done = sum(1 for g, _ in state.values() if g >= args.depth)
+    print(f"[chains] {n_done} chains complete, "
+          f"{len(state) - n_done} partial (will resume), "
+          f"{len(abstracts) * len(args.regimes) - len(state)} fresh",
           flush=True)
 
     tok, model = load_model(args.model, four_bit=not args.no_4bit)
@@ -122,10 +132,10 @@ def main():
     for rec in abstracts:
         for regime in args.regimes:
             key = (rec["pmid"], args.model, regime)
-            if key in done:
+            start_g, text = state.get(key, (0, rec["abstract"]))
+            if start_g >= args.depth:
                 continue
-            text = rec["abstract"]
-            for g in range(1, args.depth + 1):
+            for g in range(start_g + 1, args.depth + 1):
                 text = summarize(tok, model, text, regime, args.temperature)
                 if not text:
                     print(f"[chains] EMPTY generation {key} g={g}", flush=True)

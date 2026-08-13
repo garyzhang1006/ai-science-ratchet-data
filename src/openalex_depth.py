@@ -69,8 +69,14 @@ def is_reviewlike(w):
 
 
 def walk(seed_work, mailto, max_depth, branch, rng):
-    """Returns list of (depth, weight) consumption samples from one seed."""
+    """Returns list of (depth, weight) consumption samples from one seed.
+
+    A `seen` set guards against convergent citation paths: each work is
+    sampled and expanded at most once, at the depth where it was first
+    reached, so diamonds in the citation graph cannot double-count a
+    subtree's consumption weight."""
     samples = []
+    seen = {seed_work["id"]}
     frontier = [(seed_work["id"], 0)]
     while frontier:
         wid, depth = frontier.pop()
@@ -79,12 +85,13 @@ def walk(seed_work, mailto, max_depth, branch, rng):
         citers = citing_works(wid, mailto)
         if not citers:
             continue
-        # every citer consumes the claim at depth+1
-        for w in citers:
+        new = [w for w in citers if w["id"] not in seen]
+        for w in new:
+            seen.add(w["id"])
             samples.append((depth + 1, 1 + w.get("cited_by_count", 0)))
         # recurse through review-like citers first (intermediation hops)
-        reviews = [w for w in citers if is_reviewlike(w)]
-        others = [w for w in citers if not is_reviewlike(w)]
+        reviews = [w for w in new if is_reviewlike(w)]
+        others = [w for w in new if not is_reviewlike(w)]
         rng.shuffle(reviews)
         rng.shuffle(others)
         for w in (reviews + others)[:branch]:

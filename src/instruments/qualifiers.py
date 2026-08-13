@@ -12,12 +12,22 @@ Retention = share of source qualifiers present in the generation
 """
 import re
 
-RE_POP = re.compile(
-    r"\b(?:in|among|of)\s+((?:[a-z-]+\s+){0,3}?"
-    r"(?:adults?|children|adolescents?|infants?|women|men|males?|females?|"
+_POP_NOUNS = (
+    r"adults?|children|adolescents?|infants?|women|men|males?|females?|"
     r"patients?|participants?|subjects?|individuals?|volunteers?|"
-    r"mice|rats|smokers?|non-smokers|elderly|seniors?|pregnan(?:t|cy)\s*\w*))\b"
+    r"mice|rats|smokers?|non-smokers|elderly|seniors?|pregnan(?:t|cy)\s*\w*"
+)
+# Modifier prefix allows numerals so "of 200 patients with X" still matches.
+RE_POP = re.compile(
+    r"\b(?:in|among|of)\s+((?:[a-z0-9,-]+\s+){0,4}?"
+    r"(?:" + _POP_NOUNS + r"))\b"
     r"((?:\s+(?:with|without|aged|over|under)\s+[\w\s.-]{1,40}?)?)(?=[,.;)]|\s+(?:who|were|was|and|or)\b|$)",
+    re.IGNORECASE,
+)
+# Preposition-less fallback: "patients with type 2 diabetes were enrolled".
+RE_POP_BARE = re.compile(
+    r"\b((?:" + _POP_NOUNS + r")\s+(?:with|without)\s+[\w\s.-]{1,40}?)"
+    r"(?=[,.;)]|\s+(?:who|were|was|and|or|received|underwent)\b|$)",
     re.IGNORECASE,
 )
 RE_DOSE = re.compile(
@@ -47,6 +57,10 @@ def extract_qualifiers(text: str):
     quals = []
     for m in RE_POP.finditer(text):
         q = (m.group(1) + (m.group(2) or "")).strip()
+        if q:
+            quals.append(("population", q))
+    for m in RE_POP_BARE.finditer(text):
+        q = m.group(1).strip()
         if q:
             quals.append(("population", q))
     for m in RE_DOSE.finditer(text):

@@ -115,22 +115,33 @@ def h1(df: pd.DataFrame):
 
 
 def h2(df: pd.DataFrame, threshold: float = 0.5):
-    depth = int(df["generation"].max())
     chains = []
+    n_unmeasured = 0
     for key, ch in df.groupby(["pmid", "model", "regime", "cls"]):
+        # Chains with no NLI measurement (--no-nli runs, or an abstract with
+        # no extractable core sentence) must not masquerade as survivors.
+        ch = ch[(ch["generation"] == 0) | ch["core_entail"].notna()]
         ch = ch.sort_values("generation")
+        if not (ch["generation"] > 0).any():
+            n_unmeasured += 1
+            continue
         fail = ch[(ch["generation"] > 0) & (ch["core_entail"] < threshold)]
         if len(fail):
             t, e = int(fail["generation"].iloc[0]), 1
         else:
-            t, e = depth, 0
+            # censor at THIS chain's last measured generation, not the
+            # dataset-wide max: an early-terminated chain was never
+            # observed past its own last row
+            t, e = int(ch["generation"].max()), 0
         chains.append({"pmid": str(key[0]), "model": str(key[1]),
                        "regime": str(key[2]), "cls": str(key[3]),
                        "time": t, "event": e})
     surv = pd.DataFrame(chains)
     if surv.empty or surv["event"].sum() == 0:
-        return {"note": "no erosion events at threshold", "chains": len(surv)}
-    out = {"threshold": threshold, "n_chains": len(surv), "by_class": {}}
+        return {"note": "no erosion events at threshold",
+                "chains": len(surv), "unmeasured_chains": n_unmeasured}
+    out = {"threshold": threshold, "n_chains": len(surv),
+           "unmeasured_chains": n_unmeasured, "by_class": {}}
     for regime in surv["regime"].unique():
         sr = surv[surv["regime"] == regime]
         reg = {}

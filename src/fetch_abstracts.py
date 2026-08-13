@@ -80,16 +80,39 @@ def efetch(pmids):
     return out
 
 
+RE_NEG_BEFORE = re.compile(r"\b(?:no|not|was not|were not)\s*$",
+                           re.IGNORECASE)
+
+
+def _has_positive_assoc(abstract: str) -> bool:
+    """Association language not immediately negated ("no association
+    between" must not qualify an abstract as an association claim)."""
+    for m in RE_ASSOC_LANG.finditer(abstract):
+        if not RE_NEG_BEFORE.search(abstract[max(0, m.start() - 12):m.start()]):
+            return True
+    return False
+
+
+def _null_tail(abstract: str) -> bool:
+    tail = abstract[int(len(abstract) * 2 / 3):]
+    return bool(NULL_PHRASES.search(tail))
+
+
 def qualifies(cls: str, abstract: str) -> bool:
+    """Mutually exclusive assignment with null-priority: an abstract whose
+    conclusion states a null result belongs to the null stratum no matter
+    which query surfaced it. Without this, fetch order silently absorbs
+    null-result RCTs into the rct stratum (first-query-wins bias)."""
     if len(abstract.split()) < 150 or len(abstract.split()) > 450:
         return False
     if cls == "rct":
-        return bool(RE_CI.search(abstract)) and bool(RE_EFFECT.search(abstract))
+        return (not _null_tail(abstract)
+                and bool(RE_CI.search(abstract))
+                and bool(RE_EFFECT.search(abstract)))
     if cls == "obs":
-        return bool(RE_ASSOC_LANG.search(abstract))
+        return not _null_tail(abstract) and _has_positive_assoc(abstract)
     if cls == "null":
-        tail = abstract[int(len(abstract) * 2 / 3):]
-        return bool(NULL_PHRASES.search(tail))
+        return _null_tail(abstract)
     return False
 
 
