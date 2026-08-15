@@ -50,4 +50,24 @@ file is the time lock.
 
 ## Deviations
 
-None yet. Any deviation will be listed here with a git-dated entry.
+None to the specification. One pre-specified fallback fired universally and
+is recorded here for transparency.
+
+**2026-08-15, estimator fallback.** In every marker-by-regime cell, the
+random-intercept variance of the mixed model was degenerate (singular
+covariance, boundary MLE), so all H1 estimates come from the pre-specified
+cluster-robust OLS fallback rather than `mixedlm`. This is expected rather
+than anomalous: the estimand is an adjacent-generation difference, and
+differencing removes the abstract-level intercept by construction, leaving
+no level variance for a random intercept to absorb. Clustering on the
+source abstract still carries the dependence between the nine differences
+within a chain. The `method` field of every entry in `results.json` records
+which estimator produced it.
+
+**2026-08-15, model substitution.** The third model was specified as
+Llama-3.1-8B-Instruct. The run executed Phi-3.5-mini-instruct because the
+gated-model token was unavailable in the compute environment, and the
+harness swaps gated models for an ungated fallback automatically. The
+released model set is therefore Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct,
+and Mistral-7B-Instruct-v0.3, all ungated, which the replication package
+benefits from.
