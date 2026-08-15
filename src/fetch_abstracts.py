@@ -31,7 +31,8 @@ OA = "pubmed pmc open access[filter]"
 DATE = "2015:2024[dp]"
 
 QUERIES = {
-    "rct": f"Randomized Controlled Trial[pt] AND {OA} AND {DATE} AND hasabstract",
+    "rct": (f"Randomized Controlled Trial[pt] AND {OA} AND {DATE} AND "
+            "hasabstract AND (\"95% CI\"[tiab] OR \"confidence interval\"[tiab])"),
     "obs": ("(Cohort Studies[MeSH] OR Case-Control Studies[MeSH] OR "
             f"Cross-Sectional Studies[MeSH]) AND {OA} AND {DATE} AND hasabstract"),
     "null": (f"{OA} AND {DATE} AND hasabstract AND "
@@ -118,7 +119,7 @@ def qualifies(cls: str, abstract: str) -> bool:
 
 def fetch_class(cls: str, n: int, seen: set):
     kept, start = [], 0
-    while len(kept) < n and start < 2000:
+    while len(kept) < n and start < 8000:
         ids = esearch(QUERIES[cls], retmax=100, retstart=start)
         if not ids:
             break

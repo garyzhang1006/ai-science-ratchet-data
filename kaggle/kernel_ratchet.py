@@ -22,7 +22,7 @@ MODELS = [
 ]
 FALLBACKS = {"meta-llama/Llama-3.1-8B-Instruct":
              "microsoft/Phi-3.5-mini-instruct"}
-REPO = "https://github.com/GARYZHANG_GH_USER/ai-science-ratchet-data"
+REPO = "https://github.com/garyzhang1006/ai-science-ratchet-data"
 PER_CLASS = 20
 
 os.environ["HF_HUB_DISABLE_XET"] = "1"
@@ -76,8 +76,8 @@ elif model in FALLBACKS:
 slug = model.split("/")[-1].lower().replace(".", "").replace("-", "_")
 out = f"/kaggle/working/chains_{slug}.jsonl"
 
-# Reuse abstracts fetched by a previous kernel run if attached as input;
-# otherwise fetch fresh (deterministic query, relevance-sorted).
+# Corpus preference order: repo's committed corpus (same fixed abstracts
+# for every kernel) > previous run attached as input > fresh fetch.
 prev = "/kaggle/input"
 found = None
 for root, _, files in os.walk(prev):
@@ -85,7 +85,9 @@ for root, _, files in os.walk(prev):
         found = os.path.join(root, "abstracts.jsonl")
         break
 os.makedirs("data", exist_ok=True)
-if found:
+if os.path.exists("corpus/abstracts.jsonl"):
+    shutil.copy("corpus/abstracts.jsonl", "data/abstracts.jsonl")
+elif found:
     shutil.copy(found, "data/abstracts.jsonl")
 else:
     sh([sys.executable, "-m", "src.fetch_abstracts",

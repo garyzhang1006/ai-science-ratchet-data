@@ -12,10 +12,18 @@ RE_PVAL = re.compile(
     re.IGNORECASE,
 )
 RE_EFFECT = re.compile(
-    r"\b(?:a?OR|a?RR|a?HR|IRR|SMD|WMD|MD|RD|β|beta|r|d|g)\s*[=:]?\s*([-+−]?\d+(?:\.\d+)?)",
+    r"\b(?:a?OR|a?RR|a?HR|IRR|SMD|WMD|MD|RD|β|beta|r|d|g|"
+    r"odds\s+ratio|risk\s+ratio|hazard\s+ratio|relative\s+risk|"
+    r"rate\s+ratio|mean\s+difference|risk\s+difference)"
+    r"(?:\s*[\[\(]\s*a?(?:OR|RR|HR|MD|RD|IRR)\s*[\]\)])?"
+    r"\s*(?:of|was|were)?\s*[=:,]?\s*([-+−]?\d+(?:\.\d+)?)",
+    re.IGNORECASE,
 )
 RE_CI = re.compile(
-    r"(?:9[059](?:\.\d+)?%\s*(?:CI|confidence\s+interval)[,:]?\s*\[?\(?)"
+    r"(?:9[059](?:\.\d+)?\s*%\s*"
+    r"(?:CI|confidence\s+interval)s?"
+    r"(?:\s*[\[\(]\s*CI\s*[\]\)])?"
+    r"[\s,:=]*[\[\(]?)"
     r"\s*([-+−]?\d+(?:\.\d+)?)\s*(?:to|,|–|—|-)\s*([-+−]?\d+(?:\.\d+)?)",
     re.IGNORECASE,
 )
