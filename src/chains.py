@@ -114,8 +114,19 @@ def main():
     ap.add_argument("--regimes", nargs="+",
                     default=["neutral", "conservative"])
     ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--seed", type=int, default=20260815,
+                    help="RNG seed; only matters when --temperature > 0, "
+                         "where it makes the sampled chains reproducible")
     ap.add_argument("--no-4bit", action="store_true")
     args = ap.parse_args()
+
+    if args.temperature > 0:
+        import torch as _t
+        _t.manual_seed(args.seed)
+        if _t.cuda.is_available():
+            _t.cuda.manual_seed_all(args.seed)
+        print(f"[chains] sampling at temperature {args.temperature}, "
+              f"seed {args.seed}", flush=True)
 
     abstracts = [json.loads(l) for l in open(args.abstracts)]
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
