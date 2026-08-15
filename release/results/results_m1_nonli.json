@@ -1,0 +1,152 @@
+{
+  "n_abstracts": 60,
+  "models": [
+    "microsoft/Phi-3.5-mini-instruct"
+  ],
+  "n_chains": 120,
+  "max_depth": 10,
+  "H1_per_step_drift": {
+    "neutral": [
+      {
+        "marker": "hedge_density",
+        "estimate": 0.09689589611954823,
+        "se": 0.020771326750289223,
+        "p_raw": 3.087863894526381e-06,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "away_from_certainty",
+        "p_holm": 9.263591683579142e-06,
+        "h1_verdict": "reversed"
+      },
+      {
+        "marker": "causal_strength",
+        "estimate": -0.024999999999999988,
+        "se": 0.026852284776907074,
+        "p_raw": 0.3518434916951406,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "away_from_certainty",
+        "p_holm": 0.7036869833902812,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "numeric_share_exact",
+        "estimate": -0.06022451415543521,
+        "se": 0.003876104679127071,
+        "p_raw": 1.937414992368162e-54,
+        "method": "ols_cluster",
+        "n_deltas": 520,
+        "direction": "toward_certainty",
+        "p_holm": 9.68707496184081e-54,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "qualifier_share",
+        "estimate": -0.0643850155692261,
+        "se": 0.004423106962332848,
+        "p_raw": 5.3097729529296866e-48,
+        "method": "ols_cluster",
+        "n_deltas": 570,
+        "direction": "toward_certainty",
+        "p_holm": 2.1239091811718747e-47,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "bi_entail",
+        "estimate": null,
+        "note": "insufficient data",
+        "p_holm": 1.0
+      }
+    ],
+    "conservative": [
+      {
+        "marker": "hedge_density",
+        "estimate": 0.013463100459309884,
+        "se": 0.006603379088901978,
+        "p_raw": 0.04146800901024394,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "away_from_certainty",
+        "p_holm": 0.1244040270307318,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "causal_strength",
+        "estimate": 0.030000000000000013,
+        "se": 0.016173494393728144,
+        "p_raw": 0.06361240447193277,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "toward_certainty",
+        "p_holm": 0.12722480894386554,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "numeric_share_exact",
+        "estimate": -0.008427336552336552,
+        "se": 0.002767487452067299,
+        "p_raw": 0.002325860460955987,
+        "method": "ols_cluster",
+        "n_deltas": 520,
+        "direction": "toward_certainty",
+        "p_holm": 0.011629302304779935,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "qualifier_share",
+        "estimate": -0.007669172932330829,
+        "se": 0.0030072005241944034,
+        "p_raw": 0.010763955710485164,
+        "method": "ols_cluster",
+        "n_deltas": 570,
+        "direction": "toward_certainty",
+        "p_holm": 0.04305582284194066,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "bi_entail",
+        "estimate": null,
+        "note": "insufficient data",
+        "p_holm": 1.0
+      }
+    ]
+  },
+  "H2_erosion": {
+    "note": "no erosion events at threshold",
+    "chains": 0,
+    "unmeasured_chains": 120
+  },
+  "H3_regime": {
+    "hedge_density": {
+      "drift_neutral": 0.09689589611954828,
+      "drift_conservative": 0.013463100459310026,
+      "interaction_p": 0.00013446796678190945,
+      "reduction_share": 0.8610560302502439,
+      "sign_flip": false
+    },
+    "causal_strength": {
+      "drift_neutral": -0.02499999999999994,
+      "drift_conservative": 0.02999999999999982,
+      "interaction_p": 0.028439220580408237,
+      "reduction_share": -0.19999999999999574,
+      "sign_flip": true
+    },
+    "numeric_share_exact": {
+      "drift_neutral": -0.0602245141554351,
+      "drift_conservative": -0.00842733655233658,
+      "interaction_p": 1.5284312436841645e-36,
+      "reduction_share": 0.860068002697602,
+      "sign_flip": false
+    },
+    "qualifier_share": {
+      "drift_neutral": -0.06438501556922616,
+      "drift_conservative": -0.007669172932330805,
+      "interaction_p": 2.5281569478429884e-30,
+      "reduction_share": 0.8808857485778662,
+      "sign_flip": false
+    },
+    "bi_entail": {
+      "note": "insufficient data"
+    }
+  }
+}

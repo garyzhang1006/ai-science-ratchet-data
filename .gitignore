@@ -1,8 +1,9 @@
 __pycache__/
 *.pyc
-data/
-results/
-figures/out/
+# Working directories only; the tracked artifact lives in release/.
+/data/
+/results/
+/figures/out/
 .DS_Store
 *.egg-info/
 .venv/
