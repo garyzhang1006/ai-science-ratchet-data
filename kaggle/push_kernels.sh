@@ -23,6 +23,6 @@ for IDX in 0 1 2; do
   "accelerator": "NvidiaTeslaT4"
 }
 EOF
-  python3 -m kaggle kernels push -p "${DIR}"
+  python3 -m kaggle kernels push -p "${DIR}" --accelerator NvidiaTeslaT4
   echo "pushed ratchet-chains-m${IDX}"
 done
