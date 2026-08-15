@@ -1,0 +1,21 @@
+{
+  "threshold": 0.5,
+  "median_depth": 2,
+  "p90_depth": 4,
+  "markers": {
+    "hedge_density": {
+      "per_step_ratio": 1.0581924561292955,
+      "retention_at_median_depth": 1.119771274208951,
+      "expected_retention_at_consumption": 1.1419195976432304,
+      "d_star": 20,
+      "share_consumed_beyond_d_star": 0
+    },
+    "qualifier_share": {
+      "per_step_ratio": 0.9349185128596893,
+      "retention_at_median_depth": 0.874072625687773,
+      "expected_retention_at_consumption": 0.8575198679158439,
+      "d_star": 10,
+      "share_consumed_beyond_d_star": 0
+    }
+  }
+}
