@@ -1,20 +1,15 @@
 # Findings as of 2026-08-15
 
-Run complete for H1 and H3; H2 (entailment) not yet computed.
+All three hypotheses computed. 60 stratified PubMed open-access abstracts,
+three models (Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct,
+Mistral-7B-Instruct-v0.3), two prompt regimes, depth 10: 360 chains and 3600
+generations, none truncated, greedy decoding throughout.
 
-## Corpus and chains
-
-60 PubMed open-access abstracts, stratified 20/20/20 into randomized trials,
-observational studies, and explicit null results. Three models
-(Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct, Mistral-7B-Instruct-v0.3) times
-two prompt regimes times depth 10 gives 360 chains and 3600 generations, all
-complete with no truncated chains. Greedy decoding throughout.
-
-## H1: the direction is not toward certainty
+## H1: the drift is away from precision, not toward certainty
 
 The preregistered hypothesis predicted falling hedge density and rising
-causal strength. Hedge density rises instead, and causal strength does not
-move. What does fall, steeply, is the precision of the claim.
+causal strength. Hedge density rises instead, causal strength does not move,
+and what collapses is the precision of the claim.
 
 | Marker | Neutral per-step | Conservative per-step | Verdict |
 |---|---|---|---|
@@ -22,68 +17,107 @@ move. What does fall, steeply, is the precision of the claim.
 | Causal strength (1-5) | +0.0067 (0.0172) | +0.0128 (0.0115) | null |
 | Numeric fidelity (exact share) | -0.0459 (0.0034) | -0.0093 (0.0017) | supported |
 | Qualifier retention | -0.0486 (0.0036) | -0.0112 (0.0022) | supported |
+| Bidirectional entailment | -0.0677 (0.0016) | -0.0278 (0.0013) | supported |
 
-Cluster-robust standard errors in parentheses, clustered on source abstract;
-Holm-corrected across markers within regime. Every drift except causal
-strength is significant at p < 1e-7.
+Cluster-robust standard errors clustered on source abstract, Holm-corrected
+across markers within regime. Everything except causal strength is
+significant at p < 1e-7.
 
-The reversal is not a single-model artifact. Hedge density rises in all three
-models independently: Qwen +0.0499 (p = 0.0012), Phi +0.0969 (p = 9.3e-06),
-Mistral +0.0366 (p = 0.00059). Causal strength is null in all three. Numeric
-fidelity and qualifier retention fall in all three. No marker flips sign
-between models.
+The reversal replicates in every model separately, with no sign flips
+anywhere: Qwen +0.0499 (p = 0.0012), Phi +0.0969 (p = 9.3e-06), Mistral
++0.0366 (p = 0.00059).
 
-Neutral-regime trajectories, pooled, from generation 0 to 10: hedge density
-0.72 to 1.69, numeric fidelity 0.88 to 0.28, qualifier retention 0.98 to 0.33.
-The single largest loss happens at the first hop, where numeric fidelity falls
-from 0.88 to 0.43. Half of a paper's reported numbers do not survive one
-summarization.
+Pooled neutral trajectories from generation 0 to 10: hedge density 0.72 to
+1.69, numeric fidelity 0.88 to 0.28, qualifier retention 0.98 to 0.33. The
+largest single loss is the first hop, where numeric fidelity falls 0.88 to
+0.43. Half of a paper's reported numbers do not survive one summarization.
+
+## H2: the preregistered test is null, the continuous one supports it
+
+The preregistered test, first generation whose core-finding entailment drops
+below 0.5, compared by log-rank across claim classes, is null in both
+regimes (neutral p = 0.40, conservative p = 0.21). It saturates: in the
+neutral regime the median half-life is one generation for every class, which
+leaves the binary test almost no room to discriminate.
+
+The continuous version of the same question does discriminate. Regressing
+core-finding entailment on generation interacted with an indicator for null
+results, over the neutral regime with errors clustered on abstract, the
+baseline decay is -0.0078 per generation (p = 0.048) and null-result
+abstracts decay an additional -0.0145 per generation (p = 0.041). Null
+findings therefore lose their core claim about 2.9 times as fast as positive
+ones, which is the direction H2 predicted.
+
+Treat this as secondary. It is a single uncorrected test at p = 0.041, and
+the preregistered test it supplements came out null. Class trajectories,
+neutral regime, generation 0 to 10: null 0.97 to 0.21, observational 0.95 to
+0.37, randomized 0.94 to 0.32.
 
 ## H3: conservative prompting damps every rate and flips no sign
 
-Reduction in drift magnitude under the conservative regime: 79.7% for numeric
-fidelity, 76.9% for qualifier retention, 45.7% for hedge density. Interaction
-p < 1e-3 for all three. No sign flips anywhere, which is what H3 predicted.
+Reduction in drift magnitude under conservative prompting: 79.7% for numeric
+fidelity, 76.9% for qualifier retention, 45.7% for hedge density. All
+interaction p < 1e-3, no sign flips, as H3 predicted.
+
+The effect on core-finding survival is larger than on any single marker. At
+generation 10 the core finding retains 0.726 support under conservative
+prompting against 0.301 under neutral, and 10 to 21 chains per class cross
+the erosion threshold rather than 44 to 49.
 
 ## Composition against real intermediation depth
 
-An OpenAlex forward-citation walk over 30 seed works yielded 2327
+An OpenAlex forward-citation walk over 30 seed works produced 2327
 consumption-weighted samples, giving a median intermediation depth of 2 hops
-and a p90 of 4. Composing the measured neutral-regime rates along that
-distribution, a claim at the median consumption depth retains 85.8% of its
-original qualifiers, and qualifier retention stays above the 0.5 calibration
-floor out to 10 hops. Hedging accumulates rather than decays, so its
-per-step ratio exceeds 1.
+and a p90 of 4. Composing measured neutral rates along that distribution, a
+claim at median consumption depth retains 85.8% of its qualifiers, and
+qualifier retention stays above the 0.5 floor out to 10 hops. Hedging
+accumulates rather than decays, so its per-step ratio exceeds 1.
 
 ## What this means for the paper's framing
 
-The certainty-ratchet hypothesis does not survive contact with the data. The
-process these chains describe is a loss of precision, not a gain of
-confidence: claims shed their numbers and their scope conditions while
-picking up hedges, so a summarized finding drifts toward being unfalsifiable
-rather than toward being overstated. That is a publishable result and it is
-cleanly measured, but it needs the title, abstract, and H1 rewritten around
-vagueness rather than certainty.
+The certainty-ratchet hypothesis does not survive the data. These chains
+describe a loss of precision rather than a gain of confidence: claims shed
+their numbers and scope conditions while accumulating hedges, so a
+summarized finding drifts toward being unfalsifiable rather than toward
+being overstated. The title, abstract, and H1 need rewriting around
+vagueness.
 
-## Outstanding
+## Instrument validation, and one failure that was caught
 
-H2 (core-finding erosion by claim class) requires the NLI pass, which has not
-been run. Every entailment column in the released scores is empty, figure 2
-is absent, and the bidirectional-entailment row of table 1 is blank.
+The entailment instrument initially used whole-document NLI and produced a
+clean-looking H2 null with a median half-life of exactly 1.0 in every class.
+That null was an artifact. A validation check, whether a source abstract
+entails a sentence copied out of itself, returned 0.056, so the instrument
+was reporting almost nothing as supported. The cause was not truncation
+(median premise 287 tokens against a 512 limit) but the model itself:
+`cross-encoder/nli-deberta-v3-base` is trained on single-sentence premises
+and mislabels document-length ones.
+
+Replacing whole-document scoring with SummaC-style granular aggregation,
+each hypothesis sentence against every premise sentence keeping the
+best-supporting one, raised self-entailment to 0.944. The scoring kernel now
+aborts if that figure falls below 0.80, so this failure cannot pass silently
+again. All numbers above come from the corrected instrument.
+
+Backward entailment falls for any summary because summaries drop content, so
+it measures compression as much as infidelity. Forward entailment is the
+cleaner drift signal, falling 0.97 to 0.49 under neutral prompting against
+0.97 to 0.78 under conservative.
 
 ## Deviations
 
-Both logged in `prereg/PREREGISTRATION.md`: all H1 estimates come from the
-pre-specified cluster-robust OLS fallback because differencing leaves the
-random intercept degenerate, and the third model is Phi-3.5-mini rather than
-Llama-3.1-8B because the gated-model token was unavailable at run time.
+Both logged in `prereg/PREREGISTRATION.md`. All H1 estimates come from the
+pre-specified cluster-robust OLS fallback, because differencing removes the
+abstract-level intercept and leaves the random-intercept variance
+degenerate. The third model is Phi-3.5-mini rather than Llama-3.1-8B,
+because the gated-model token was unavailable at run time.
 
 ## Files
 
 - `abstracts.jsonl` — the 60-abstract corpus with stratum labels
-- `chains/*.jsonl.gz` — all 3600 generations, one per model
-- `results/scores_nonli.csv.gz` — every marker on every generation
-- `results/results_nonli.json` — H1 and H3 estimates with per-test estimator
+- `chains/*.jsonl.gz` — all 3600 generations, one file per model
+- `results/scores.csv.gz` — every marker on every generation
+- `results/results.json` — H1, H2, and H3 with the estimator used per test
 - `results/depth_distribution.json` — OpenAlex depth weights
 - `results/composed.json` — retention composed along depth
-- `figures/` — figure 1, figure 3, table 1
+- `figures/` — figures 1 to 3 and table 1

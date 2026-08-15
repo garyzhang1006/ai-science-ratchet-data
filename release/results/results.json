@@ -1,0 +1,3088 @@
+{
+  "n_abstracts": 60,
+  "models": [
+    "Qwen/Qwen2.5-7B-Instruct",
+    "microsoft/Phi-3.5-mini-instruct",
+    "mistralai/Mistral-7B-Instruct-v0.3"
+  ],
+  "n_chains": 360,
+  "max_depth": 10,
+  "H1_per_step_drift": {
+    "neutral": [
+      {
+        "marker": "hedge_density",
+        "estimate": 0.06111396637021523,
+        "se": 0.011076011569643326,
+        "p_raw": 3.4349026838629415e-08,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "away_from_certainty",
+        "p_holm": 6.869805367725883e-08,
+        "h1_verdict": "reversed"
+      },
+      {
+        "marker": "causal_strength",
+        "estimate": 0.00666666666666667,
+        "se": 0.01722784064845805,
+        "p_raw": 0.6987780235133523,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "toward_certainty",
+        "p_holm": 0.6987780235133523,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "numeric_share_exact",
+        "estimate": -0.04593262244578035,
+        "se": 0.0034143159092542056,
+        "p_raw": 2.9582894522706517e-41,
+        "method": "ols_cluster",
+        "n_deltas": 1560,
+        "direction": "toward_certainty",
+        "p_holm": 1.1833157809082607e-40,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "qualifier_share",
+        "estimate": -0.04860066833751042,
+        "se": 0.003617993930683327,
+        "p_raw": 3.8716843089856384e-41,
+        "method": "ols_cluster",
+        "n_deltas": 1710,
+        "direction": "toward_certainty",
+        "p_holm": 1.1833157809082607e-40,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "bi_entail",
+        "estimate": -0.06767399747471488,
+        "se": 0.0016370432755142108,
+        "p_raw": 0.0,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "toward_certainty",
+        "p_holm": 0.0,
+        "h1_verdict": "supported"
+      }
+    ],
+    "conservative": [
+      {
+        "marker": "hedge_density",
+        "estimate": 0.033211431734020344,
+        "se": 0.005691603406878425,
+        "p_raw": 5.373811278081225e-09,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "away_from_certainty",
+        "p_holm": 2.14952451123249e-08,
+        "h1_verdict": "reversed"
+      },
+      {
+        "marker": "causal_strength",
+        "estimate": 0.01277777777777778,
+        "se": 0.011484088358043884,
+        "p_raw": 0.26585852052511283,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "toward_certainty",
+        "p_holm": 0.26585852052511283,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "numeric_share_exact",
+        "estimate": -0.009327350281297653,
+        "se": 0.0016718520222269973,
+        "p_raw": 2.4183218494295654e-08,
+        "method": "ols_cluster",
+        "n_deltas": 1560,
+        "direction": "toward_certainty",
+        "p_holm": 7.254965548288696e-08,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "qualifier_share",
+        "estimate": -0.011225095567200829,
+        "se": 0.0021623054677048117,
+        "p_raw": 2.0887275445821473e-07,
+        "method": "ols_cluster",
+        "n_deltas": 1710,
+        "direction": "toward_certainty",
+        "p_holm": 4.1774550891642946e-07,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "bi_entail",
+        "estimate": -0.02781016205654831,
+        "se": 0.0013253973428774552,
+        "p_raw": 9.475902157622103e-98,
+        "method": "ols_cluster",
+        "n_deltas": 1800,
+        "direction": "toward_certainty",
+        "p_holm": 4.737951078811052e-97,
+        "h1_verdict": "supported"
+      }
+    ]
+  },
+  "H2_erosion": {
+    "threshold": 0.5,
+    "n_chains": 360,
+    "unmeasured_chains": 0,
+    "by_class": {
+      "conservative": {
+        "rct": {
+          "n": 60,
+          "events": 21,
+          "median_halflife": null
+        },
+        "obs": {
+          "n": 60,
+          "events": 10,
+          "median_halflife": null
+        },
+        "null": {
+          "n": 60,
+          "events": 21,
+          "median_halflife": null
+        },
+        "logrank_null_vs_rest_p": 0.2106400896576076
+      },
+      "neutral": {
+        "rct": {
+          "n": 60,
+          "events": 44,
+          "median_halflife": 1.0
+        },
+        "obs": {
+          "n": 60,
+          "events": 44,
+          "median_halflife": 1.0
+        },
+        "null": {
+          "n": 60,
+          "events": 49,
+          "median_halflife": 1.0
+        },
+        "logrank_null_vs_rest_p": 0.3997583267658198
+      }
+    },
+    "survival_rows": [
+      {
+        "pmid": "27211272",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "27211272",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "27211272",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "27211272",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 8,
+        "event": 1
+      },
+      {
+        "pmid": "27211272",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "27211272",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "28144132",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "28144132",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "28144132",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "28144132",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "28144132",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "28144132",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29504989",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "29504989",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29504989",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "29504989",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29504989",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "29504989",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "29752332",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "29752332",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29752332",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29752332",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29752332",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "29752332",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32067402",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32067402",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32067402",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32067402",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32067402",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32067402",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32238981",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32238981",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 6,
+        "event": 1
+      },
+      {
+        "pmid": "32238981",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32238981",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32238981",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 1
+      },
+      {
+        "pmid": "32238981",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32384520",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32384520",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32384520",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32384520",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32384520",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32384520",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32938413",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32938413",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32938413",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32938413",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 6,
+        "event": 1
+      },
+      {
+        "pmid": "32938413",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "32938413",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32965430",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32965430",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32965430",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32965430",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32965430",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "32965430",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32986345",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "32986345",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32986345",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32986345",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 5,
+        "event": 1
+      },
+      {
+        "pmid": "32986345",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "32986345",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33180985",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33180985",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33180985",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33180985",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33180985",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33180985",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33353039",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33353039",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 6,
+        "event": 1
+      },
+      {
+        "pmid": "33353039",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33353039",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33353039",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33353039",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 7,
+        "event": 1
+      },
+      {
+        "pmid": "33513629",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33513629",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 3,
+        "event": 1
+      },
+      {
+        "pmid": "33513629",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33513629",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33513629",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33513629",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33579245",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33579245",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 3,
+        "event": 1
+      },
+      {
+        "pmid": "33579245",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33579245",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "33579245",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "33579245",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33615642",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33615642",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33615642",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33615642",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33615642",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33615642",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33618764",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33618764",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33618764",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33618764",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33618764",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33618764",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33639676",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33639676",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33639676",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33639676",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33639676",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33639676",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33684925",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33684925",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33684925",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33684925",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "33684925",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "33684925",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34133005",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "34133005",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34133005",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34133005",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "34133005",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34133005",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "34252178",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34252178",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34252178",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34252178",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34252178",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34252178",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34587373",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34587373",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34587373",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34587373",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 3,
+        "event": 1
+      },
+      {
+        "pmid": "34587373",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34587373",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34662498",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34662498",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34662498",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34662498",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34662498",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34662498",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34737469",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34737469",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34737469",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "34737469",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "34737469",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "34737469",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35092181",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35092181",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35092181",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35092181",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "35092181",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35092181",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35764480",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35764480",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35764480",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35764480",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35764480",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35764480",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35795140",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35795140",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35795140",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35795140",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35795140",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 6,
+        "event": 1
+      },
+      {
+        "pmid": "35795140",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35923359",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35923359",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35923359",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35923359",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35923359",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35923359",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35956360",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "35956360",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "35956360",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 5,
+        "event": 1
+      },
+      {
+        "pmid": "35956360",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "35956360",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "35956360",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36069202",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36069202",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "36069202",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36069202",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36069202",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36069202",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36329500",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36329500",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "36329500",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36329500",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36329500",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36329500",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36419163",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36419163",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36419163",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36419163",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36419163",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36419163",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36421766",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36421766",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36421766",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36421766",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36421766",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "36421766",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36503538",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36503538",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36503538",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36503538",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36503538",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36503538",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36721099",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36721099",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36721099",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36721099",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36721099",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36721099",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36767992",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36767992",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "36767992",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36767992",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "36767992",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "36767992",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37076897",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37076897",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37076897",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37076897",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37076897",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37076897",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37097117",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37300837",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37300837",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37300837",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37300837",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "37300837",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37300837",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37403242",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37403242",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "37403242",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37403242",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "37403242",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37403242",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37479854",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37479854",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37479854",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37479854",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 5,
+        "event": 1
+      },
+      {
+        "pmid": "37479854",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37479854",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 3,
+        "event": 1
+      },
+      {
+        "pmid": "37487766",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37487766",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "37487766",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37487766",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37487766",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37487766",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37498817",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37498817",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37498817",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37498817",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37498817",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37498817",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37524953",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37524953",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "37524953",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37524953",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37524953",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37524953",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37629724",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37629724",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37629724",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37629724",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37629724",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37629724",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37638044",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37638044",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37638044",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37638044",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37638044",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37638044",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37657055",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37657055",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37657055",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37657055",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37657055",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37657055",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37713527",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37713527",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37713527",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37713527",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37713527",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37713527",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37722354",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37722354",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37722354",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37722354",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37722354",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37722354",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37730963",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37730963",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 4,
+        "event": 1
+      },
+      {
+        "pmid": "37730963",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37730963",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37730963",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37730963",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37790677",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37790677",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37790677",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37790677",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 8,
+        "event": 1
+      },
+      {
+        "pmid": "37790677",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37790677",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "37845511",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37845511",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37845511",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37845511",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37845511",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "37845511",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38311853",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38311853",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38311853",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38311853",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "38311853",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38311853",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38489068",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38489068",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "38489068",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38489068",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "38489068",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 5,
+        "event": 1
+      },
+      {
+        "pmid": "38489068",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 3,
+        "event": 1
+      },
+      {
+        "pmid": "38601382",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38601382",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38601382",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38601382",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38601382",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38601382",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38676541",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38676541",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38676541",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38676541",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38676541",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38676541",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38796653",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38796653",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38796653",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38796653",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38796653",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 6,
+        "event": 1
+      },
+      {
+        "pmid": "38796653",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38974277",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38974277",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "38974277",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "38974277",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38974277",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "38974277",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "obs",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39008468",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39008468",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39008468",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39008468",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "39008468",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "39008468",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39369280",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39369280",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39369280",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39369280",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 2,
+        "event": 1
+      },
+      {
+        "pmid": "39369280",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "rct",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39369280",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "rct",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39372369",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39372369",
+        "model": "Qwen/Qwen2.5-7B-Instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39372369",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 10,
+        "event": 0
+      },
+      {
+        "pmid": "39372369",
+        "model": "microsoft/Phi-3.5-mini-instruct",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39372369",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "conservative",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      },
+      {
+        "pmid": "39372369",
+        "model": "mistralai/Mistral-7B-Instruct-v0.3",
+        "regime": "neutral",
+        "cls": "null",
+        "time": 1,
+        "event": 1
+      }
+    ]
+  },
+  "H3_regime": {
+    "hedge_density": {
+      "drift_neutral": 0.0611139663702151,
+      "drift_conservative": 0.033211431734020226,
+      "interaction_p": 0.01184958379315841,
+      "reduction_share": 0.4565655985600312,
+      "sign_flip": false
+    },
+    "causal_strength": {
+      "drift_neutral": 0.006666666666666683,
+      "drift_conservative": 0.012777777777777801,
+      "interaction_p": 0.6611163203518102,
+      "reduction_share": -0.9166666666666656,
+      "sign_flip": false
+    },
+    "numeric_share_exact": {
+      "drift_neutral": -0.045932622445780294,
+      "drift_conservative": -0.009327350281297601,
+      "interaction_p": 9.815317539131284e-47,
+      "reduction_share": 0.7969340789912926,
+      "sign_flip": false
+    },
+    "qualifier_share": {
+      "drift_neutral": -0.04860066833751052,
+      "drift_conservative": -0.011225095567200895,
+      "interaction_p": 1.630213049924666e-27,
+      "reduction_share": 0.7690341316039631,
+      "sign_flip": false
+    },
+    "bi_entail": {
+      "drift_neutral": -0.06767399747471466,
+      "drift_conservative": -0.027810162056548092,
+      "interaction_p": 3.252580008361373e-117,
+      "reduction_share": 0.5890569037695914,
+      "sign_flip": false
+    }
+  }
+}

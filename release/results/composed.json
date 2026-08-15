@@ -17,5 +17,6 @@
       "d_star": 10,
       "share_consumed_beyond_d_star": 0
     }
-  }
+  },
+  "null_dead_by_median_depth_share": 0.6666666666666666
 }
