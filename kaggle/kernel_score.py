@@ -50,6 +50,29 @@ print(f"[kernel] cuda={torch.cuda.is_available()} "
 
 W = "/kaggle/working"
 
+# 0. Validate the entailment instrument before trusting anything built on
+# it: a text must entail its own core sentence. The first run of this
+# pipeline reported a clean H2 null that was entirely an artifact of this
+# check failing (mean self-entailment 0.06), so the gate is hard.
+sys.path.insert(0, os.getcwd())
+import json as _json  # noqa: E402
+from src.instruments.entailment import EntailmentScorer  # noqa: E402
+
+_srcs = [_json.loads(l)["abstract"]
+         for l in open("corpus/abstracts.jsonl")][:20]
+_scorer = EntailmentScorer()
+_self = _scorer.validate_self_entailment(_srcs)
+print(f"[validate] mean self-entailment on 20 sources: {_self:.4f}", flush=True)
+if _self < 0.80:
+    raise SystemExit(
+        f"[validate] FAILED: self-entailment {_self:.4f} < 0.80. The NLI "
+        "instrument does not support claims drawn from its own premise, so "
+        "H2 survival numbers would be meaningless. Fix the instrument "
+        "before rerunning.")
+del _scorer
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+
 # 1. Score every generation, entailment included.
 sh([sys.executable, "-u", "-m", "src.score",
     "--abstracts", "corpus/abstracts.jsonl",
