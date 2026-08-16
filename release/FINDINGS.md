@@ -24,13 +24,15 @@ across markers within regime. Everything except causal strength is
 significant at p < 1e-7.
 
 The reversal replicates in every model separately, with no sign flips
-anywhere: Qwen +0.0499 (p = 0.0012), Phi +0.0969 (p = 9.3e-06), Mistral
-+0.0366 (p = 0.00059).
+anywhere: Qwen +0.0499 (p = 0.00080), Phi +0.0969 (p = 6.2e-06), Mistral
++0.0366 (p = 0.00039).
 
 Pooled neutral trajectories from generation 0 to 10: hedge density 0.72 to
-1.69, numeric fidelity 0.88 to 0.28, qualifier retention 0.98 to 0.33. The
-largest single loss is the first hop, where numeric fidelity falls 0.88 to
-0.43. Half of a paper's reported numbers do not survive one summarization.
+1.33, numeric fidelity 0.88 to 0.42, qualifier retention 0.98 to 0.49. The
+loss is front-loaded rather than compounding: numeric fidelity falls 0.88 to
+0.52 across the first hop alone, which is 41% of the original content and
+79% of all numeric loss incurred over ten generations. Qualifier retention
+behaves the same way, with the first hop accounting for 52% of total loss.
 
 ## H2: the preregistered test is null, the continuous one supports it
 
