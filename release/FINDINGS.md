@@ -64,6 +64,26 @@ generation 10 the core finding retains 0.726 support under conservative
 prompting against 0.301 under neutral, and 10 to 21 chains per class cross
 the erosion threshold rather than 44 to 49.
 
+## Temperature sensitivity: the drift is not a greedy-decoding artifact
+
+The main experiment fixes decoding at temperature 0. Rerunning a stratified
+20-abstract subset through all three models under the neutral regime at
+temperature 0.7, with a fixed seed, reproduces every sign and nearly every
+magnitude.
+
+| Marker | Temperature 0.7 | Temperature 0, same 20 abstracts |
+|---|---|---|
+| Hedge density | +0.0515 (p = 0.091) | +0.0527 (p = 0.0092) |
+| Causal strength | +0.0250 (p = 0.86) | +0.0283 (p = 0.36) |
+| Numeric fidelity | -0.0511 (p = 5.5e-16) | -0.0399 (p = 2.4e-13) |
+| Qualifier retention | -0.0546 (p = 1.9e-17) | -0.0443 (p = 2.8e-15) |
+
+No sign flips. The information-loss rates are slightly steeper under
+sampling than under greedy decoding. Hedge density keeps essentially the
+same effect size and loses significance only because the subset holds 20
+abstracts rather than 60, which is a power difference and not a change in
+the estimate.
+
 ## Composition against real intermediation depth
 
 An OpenAlex forward-citation walk over 30 seed works produced 2327
@@ -115,9 +135,13 @@ because the gated-model token was unavailable at run time.
 ## Files
 
 - `abstracts.jsonl` — the 60-abstract corpus with stratum labels
-- `chains/*.jsonl.gz` — all 3600 generations, one file per model
+- `abstracts_sensitivity.jsonl` — the 20-abstract sensitivity subset
+- `chains/chains_*.jsonl.gz` — all 3600 main generations, one file per model
+- `chains/sens_*.jsonl.gz` — the 600 temperature-0.7 generations
 - `results/scores.csv.gz` — every marker on every generation
 - `results/results.json` — H1, H2, and H3 with the estimator used per test
+- `results/scores_sensitivity.csv.gz`, `results/results_sensitivity.json` —
+  the temperature arm
 - `results/depth_distribution.json` — OpenAlex depth weights
 - `results/composed.json` — retention composed along depth
 - `figures/` — figures 1 to 3 and table 1

@@ -1,0 +1,86 @@
+{
+  "n_abstracts": 20,
+  "models": [
+    "Qwen/Qwen2.5-7B-Instruct",
+    "microsoft/Phi-3.5-mini-instruct",
+    "mistralai/Mistral-7B-Instruct-v0.3"
+  ],
+  "n_chains": 60,
+  "max_depth": 10,
+  "H1_per_step_drift": {
+    "neutral": [
+      {
+        "marker": "hedge_density",
+        "estimate": 0.05147867106713801,
+        "se": 0.023765711282677904,
+        "p_raw": 0.03030430534156006,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "away_from_certainty",
+        "p_holm": 0.09091291602468018,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "causal_strength",
+        "estimate": 0.025000000000000012,
+        "se": 0.031611216456314296,
+        "p_raw": 0.4290265536601806,
+        "method": "ols_cluster",
+        "n_deltas": 600,
+        "direction": "toward_certainty",
+        "p_holm": 0.8580531073203612,
+        "h1_verdict": "null"
+      },
+      {
+        "marker": "numeric_share_exact",
+        "estimate": -0.05108604845446954,
+        "se": 0.006179732313685558,
+        "p_raw": 1.3770759658832798e-16,
+        "method": "ols_cluster",
+        "n_deltas": 480,
+        "direction": "toward_certainty",
+        "p_holm": 5.508303863533119e-16,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "qualifier_share",
+        "estimate": -0.05462633857370701,
+        "se": 0.006290466235461662,
+        "p_raw": 3.821263097554785e-18,
+        "method": "ols_cluster",
+        "n_deltas": 570,
+        "direction": "toward_certainty",
+        "p_holm": 1.9106315487773925e-17,
+        "h1_verdict": "supported"
+      },
+      {
+        "marker": "bi_entail",
+        "estimate": null,
+        "note": "insufficient data",
+        "p_holm": 1.0
+      }
+    ]
+  },
+  "H2_erosion": {
+    "note": "no erosion events at threshold",
+    "chains": 0,
+    "unmeasured_chains": 60
+  },
+  "H3_regime": {
+    "hedge_density": {
+      "note": "insufficient data"
+    },
+    "causal_strength": {
+      "note": "insufficient data"
+    },
+    "numeric_share_exact": {
+      "note": "insufficient data"
+    },
+    "qualifier_share": {
+      "note": "insufficient data"
+    },
+    "bi_entail": {
+      "note": "insufficient data"
+    }
+  }
+}
