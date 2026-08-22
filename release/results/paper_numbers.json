@@ -1,0 +1,108 @@
+{
+  "trajectories_neutral": {
+    "hedge_density_g0": 0.716,
+    "hedge_density_g10": 1.328,
+    "hedge_density_rise_pct": 85.3,
+    "numeric_g0": 0.88,
+    "numeric_g1": 0.516,
+    "numeric_g10": 0.421,
+    "qualifier_g0": 0.976,
+    "qualifier_g10": 0.49,
+    "fwd_entail_g0": 0.968,
+    "fwd_entail_g10": 0.486
+  },
+  "trajectories_conservative": {
+    "numeric_g10": 0.787,
+    "qualifier_g10": 0.864,
+    "fwd_entail_g10": 0.78
+  },
+  "front_loading": {
+    "numeric_first_hop_share_of_original": 0.413,
+    "numeric_first_hop_share_of_total_loss": 0.792,
+    "qualifier_first_hop_share_of_total_loss": 0.518
+  },
+  "hedge_density_by_model_neutral": {
+    "Qwen/Qwen2.5-7B-Instruct": {
+      "estimate": 0.0499,
+      "p": 0.000402
+    },
+    "microsoft/Phi-3.5-mini-instruct": {
+      "estimate": 0.0969,
+      "p": 3.09e-06
+    },
+    "mistralai/Mistral-7B-Instruct-v0.3": {
+      "estimate": 0.0366,
+      "p": 0.000196
+    }
+  },
+  "hedge_count_neutral": {
+    "per_step_drift": -0.0178,
+    "p": 0.254,
+    "n_deltas": 1800
+  },
+  "word_counts": {
+    "source_mean": 209.9,
+    "neutral_g1_mean": 147.1,
+    "neutral_g10_mean": 115.5,
+    "neutral_summary_mean": 123.2,
+    "conservative_summary_mean": 195.2
+  },
+  "density_controlling_words": {
+    "intercept": 0.0448,
+    "p": 0.000153,
+    "word_slope": -0.00173
+  },
+  "h2_continuous_neutral": {
+    "core_entail_g0_null": 0.971,
+    "core_entail_g10_null": 0.21,
+    "core_entail_g10_obs": 0.368,
+    "core_entail_g10_rct": 0.324,
+    "full_chain": {
+      "generations": "0..10",
+      "baseline_decay_per_gen": -0.0322,
+      "baseline_p": 9e-15,
+      "extra_decay_null": -0.0165,
+      "extra_decay_null_p": 0.0086,
+      "null_rate_ratio": 1.51
+    },
+    "after_first_hop": {
+      "generations": "1..10",
+      "baseline_decay_per_gen": -0.0078,
+      "baseline_p": 0.048,
+      "extra_decay_null": -0.0145,
+      "extra_decay_null_p": 0.041,
+      "null_rate_ratio": 2.87
+    }
+  },
+  "greedy_drift_on_sensitivity_subset": {
+    "hedge_density": {
+      "estimate": 0.0527,
+      "p": 0.0046
+    },
+    "causal_strength": {
+      "estimate": 0.0283,
+      "p": 0.36
+    },
+    "numeric_share_exact": {
+      "estimate": -0.0399,
+      "p": 8e-14
+    },
+    "qualifier_share": {
+      "estimate": -0.0443,
+      "p": 6.9e-16
+    }
+  },
+  "h2_gen10_support": {
+    "neutral": 0.301,
+    "conservative": 0.726
+  },
+  "case_study": {
+    "pmid": "32938413",
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "numeric_n_source": 5,
+    "numeric_share_g1": 0.0,
+    "numeric_share_g10": 0.0,
+    "core_entail_g0": 0.997,
+    "core_entail_g1": 0.01
+  }
+}

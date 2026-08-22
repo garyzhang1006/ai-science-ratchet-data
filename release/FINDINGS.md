@@ -24,8 +24,9 @@ across markers within regime. Everything except causal strength is
 significant at p < 1e-7.
 
 The reversal replicates in every model separately, with no sign flips
-anywhere: Qwen +0.0499 (p = 0.00080), Phi +0.0969 (p = 6.2e-06), Mistral
-+0.0366 (p = 0.00039).
+anywhere: Qwen +0.0499 (p = 4.0e-04), Phi +0.0969 (p = 3.1e-06), Mistral
++0.0366 (p = 2.0e-04), cluster-robust with the same normal reference used
+for the pooled estimates.
 
 Pooled neutral trajectories from generation 0 to 10: hedge density 0.72 to
 1.33, numeric fidelity 0.88 to 0.42, qualifier retention 0.98 to 0.49. The
@@ -44,16 +45,19 @@ leaves the binary test almost no room to discriminate.
 
 The continuous version of the same question does discriminate. Regressing
 core-finding entailment on generation interacted with an indicator for null
-results, over the neutral regime with errors clustered on abstract, the
-baseline decay is -0.0078 per generation (p = 0.048) and null-result
-abstracts decay an additional -0.0145 per generation (p = 0.041). Null
-findings therefore lose their core claim about 2.9 times as fast as positive
-ones, which is the direction H2 predicted.
+results, over all eleven generations of the neutral regime with errors
+clustered on abstract, the baseline decay is -0.032 per generation
+(p = 9e-15) and null-result abstracts decay an additional -0.0165 per
+generation (p = 0.009), so null findings lose their core claim about 1.5
+times as fast as positive ones, which is the direction H2 predicted. The gap
+survives dropping the first hop: on generations 1 to 10 alone the baseline
+decay is -0.0078 (p = 0.048) and the null excess -0.0145 (p = 0.041). Both
+specifications are emitted by `src/paper_numbers.py`.
 
-Treat this as secondary. It is a single uncorrected test at p = 0.041, and
-the preregistered test it supplements came out null. Class trajectories,
-neutral regime, generation 0 to 10: null 0.97 to 0.21, observational 0.95 to
-0.37, randomized 0.94 to 0.32.
+Treat this as secondary. It is an uncorrected test that was not
+preregistered, and the preregistered test it supplements came out null.
+Class trajectories, neutral regime, generation 0 to 10: null 0.97 to 0.21,
+observational 0.95 to 0.37, randomized 0.94 to 0.32.
 
 ## H3: conservative prompting damps every rate and flips no sign
 
@@ -91,9 +95,10 @@ the estimate.
 An OpenAlex forward-citation walk over 30 seed works produced 2327
 consumption-weighted samples, giving a median intermediation depth of 2 hops
 and a p90 of 4. Composing measured neutral rates along that distribution, a
-claim at median consumption depth retains 85.8% of its qualifiers, and
-qualifier retention stays above the 0.5 floor out to 10 hops. Hedging
-accumulates rather than decays, so its per-step ratio exceeds 1.
+claim at the median depth of two hops retains 87.4% of its qualifiers, the
+expectation over the whole depth distribution is 85.8%, and qualifier
+retention stays above the 0.5 floor out to 10 hops. Hedge density rises
+rather than decays, so its per-step ratio exceeds 1.
 
 ## What this means for the paper's framing
 
@@ -142,6 +147,11 @@ because the gated-model token was unavailable at run time.
 - `chains/sens_*.jsonl.gz` — the 600 temperature-0.7 generations
 - `results/scores.csv.gz` — every marker on every generation
 - `results/results.json` — H1, H2, and H3 with the estimator used per test
+- `results/paper_numbers.json` — every figure quoted in the paper's running
+  text (trajectory endpoints, front-loading shares, per-model drift, word
+  counts, the hedge-count and length-control checks, the continuous H2
+  regression, the temperature-arm comparison, and the case-study chain),
+  recomputed by `python -m src.paper_numbers --release release`
 - `results/scores_sensitivity.csv.gz`, `results/results_sensitivity.json` —
   the temperature arm
 - `results/depth_distribution.json` — OpenAlex depth weights
