@@ -1,0 +1,215 @@
+\documentclass{article}
+\usepackage[sglblindworkshop]{neurips_2026}
+\workshoptitle{AI for Scientific Knowledge (AISciK)}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts,amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\title{The Vagueness Ratchet: Repeated AI Summarization Makes\\Scientific Claims Less Precise, Not More Confident}
+
+\author{%
+  Gary Zhang\\
+  \texttt{[AFFILIATION AND CONTACT EMAIL TO BE FILLED BEFORE SUBMISSION]}\\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Scientific claims increasingly reach their readers through language-model intermediaries, and prior work shows that iterative LLM processing degrades information in general text. Whether that degradation has a direction on scientific claims is unstudied, and the difference matters, because unbiased noise averages out across a literature while systematic drift compounds. We preregistered the hypothesis that summarization chains push claims toward certainty, stripping hedges and hardening causal language, and we measured it on 360 chains of depth ten built from 60 stratified PubMed abstracts across three open-weight models and two prompt regimes. The certainty hypothesis is wrong, and informatively so. Hedge density rises rather than falls, by $0.061$ per 100 words per generation ($p = 7 \times 10^{-8}$), and this reversal replicates in all three models with no sign flips; causal-claim strength does not move at all ($p = 0.70$). What collapses is precision. Exact retention of effect sizes, intervals, and p-values falls $0.046$ per generation and scope-qualifier retention falls $0.049$ per generation, both at $p < 10^{-40}$. Claims therefore drift toward being unfalsifiable rather than toward being overstated. The loss is also front-loaded rather than compounding: a single summarization destroys $41\%$ of a paper's reported numbers, which is $79\%$ of all the numeric loss incurred over ten generations, so chain depth matters far less than whether any unassisted summarization happens at all. Prompting that demands preservation of every caveat cuts the numeric loss rate by $80\%$ and costs nothing in length. All chains, code, instruments, and measurements are released.
+\end{abstract}
+
+\section{Introduction}
+
+Between a scientific finding and the person who acts on it there is now, with growing frequency, a language model, and often several in sequence: the model that summarized the paper for a review, the model that summarized the review for a briefing, the model that compressed the briefing into a paragraph a decision-maker actually read. Each hop is individually reasonable and lossy in a way that looks tolerable, and the community has begun to quantify the loss, with iterative-generation experiments showing that facts mutate and information degrades over repeated LLM processing of news and narrative text \citep{mohamed2025telephone}. What that line of work has not asked is whether the loss on scientific claims has a direction. Does repeated AI summarization strip hedges, harden causal language, and erase null results at a rate beyond what symmetric noise would produce?
+
+The distinction between noise and bias is the whole question. If each summarization step perturbs a claim symmetrically, aggregate scientific communication survives, because errors decorrelate across chains and readers and the literature's redundancy absorbs them. If instead each step pushes systematically in one direction, toward brevity's natural allies of confidence and positivity, then the pipeline is a ratchet, every hop tightens it, and small per-step biases become large end-to-end distortions at depths that real scholarly communication already reaches. Psycholinguistics gives reasons to expect the directional case, since human serial reproduction conventionalizes and sharpens material toward schema-congruent forms \citep{bartlett1932remembering}, and instruction-tuned models are trained on human preferences that reward clear, confident prose. We preregistered exactly that expectation.
+
+It is wrong. Hedges do not thin out under repeated summarization; measured per hundred words, they grow denser, and they do so across all three models we tested. Causal language does not harden; it does not move at all. The property that collapses is precision. Numbers and scope conditions fall away generation after generation while the hedges are spared, so a claim that began as a bounded quantitative statement about a specific population ends as a vague directional gesture, hedged and unfalsifiable rather than confident and overstated. Calling this a certainty ratchet inverts what the pipeline actually does.
+
+The shape of the loss is also not what a ratchet metaphor implies. Degradation is heavily front-loaded rather than exponential in depth: the very first summarization destroys $41\%$ of the numeric content of an abstract, accounting for $79\%$ of all numeric loss over ten generations, after which the curve flattens. The policy implication inverts accordingly. Provenance requirements that shorten citation chains buy much less than compounding would predict, because most of the damage is already done at hop one, and what matters is whether a reader is downstream of any unassisted summarization at all.
+
+We measure all of this with instruments built entirely from automated, reproducible components, avoiding the single-annotator ceiling that limits much integrity research. Our contributions are the first measurement of the \emph{direction} of LLM summarization drift on scientific claims, with preregistered hypotheses and fully automated scoring; the finding that the direction is toward vagueness rather than certainty, replicated across three model families; the finding that loss is front-loaded rather than compounding, which redirects where interventions should bind; a released corpus of 4{,}200 scored generations; and a documented instrument-validation failure, caught by a self-entailment check, that would otherwise have produced a clean and entirely spurious null.
+
+\section{Related work}
+
+Iterative generation is known to distort. The broken-telephone line of work ran chains of translation and paraphrase through open-weight models and documented cumulative factual drift, its dependence on language and chain design, and its partial mitigation by conservative decoding \citep{mohamed2025telephone}. These studies quantify how much information moves; none scores the epistemic direction of the movement on scientific material, which is our object. Serial reproduction in humans, from Bartlett's original experiments onward \citep{bartlett1932remembering}, shows systematic conventionalization and sharpening rather than random decay, and our design is the LLM analogue of that tradition with instruments swapped for annotators. Our result is a point of contrast with it: where human serial reproduction sharpens, model serial reproduction blurs.
+
+On the science-communication side, studies of press releases and news coverage document exaggeration of causal claims relative to the underlying papers, establishing a human baseline our pipeline might have been expected to automate. Hedging and metadiscourse have quantitative traditions in applied linguistics \citep{hyland2005metadiscourse}, which we use directly. Prevalence work establishes that LLMs already touch a material share of scientific text \citep{liang2024mapping,kobak2024delving}, which is what gives a per-step bias its population relevance: a bias matters in proportion to how much text passes through it.
+
+\section{Design}
+\label{sec:design}
+
+\subsection{Source claims and stratification}
+
+We draw 60 abstracts from the PubMed open-access subset, stratified equally into three claim classes: randomized trials whose abstracts report at least one numeric effect size with an interval, observational studies with unnegated association language, and explicit null results, operationalized as a null phrase (``no significant difference'', ``did not differ'', ``was not associated'', and similar) appearing in the final third of the abstract. Assignment is mutually exclusive with null-priority, so an abstract whose conclusion reports a null result is classed null regardless of which query surfaced it; without that rule, fetch order silently absorbs null-result trials into the trial stratum. Abstracts are gated to 150--450 words.
+
+\subsection{Chains and regimes}
+
+Each abstract seeds chains of depth ten under every combination of three models (Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct, Mistral-7B-Instruct-v0.3) and two prompt regimes: \emph{neutral}, which asks for a faithful summary at roughly the original length, and \emph{conservative}, which additionally instructs the model to preserve every hedge, qualifier, number, and statement of uncertainty. This gives 360 chains and 3{,}600 scored generations, all of which completed without truncation. Decoding is greedy, to separate systematic drift from sampling variance; a sensitivity arm reruns a stratified 20-abstract subset through all three models at temperature $0.7$ with a fixed seed, adding 600 further generations.
+
+\subsection{Instruments}
+
+Five instruments score every generation, all deterministic given released code. Hedge density counts matches against the hedge sublist of Hyland's metadiscourse lexicon \citep{hyland2005metadiscourse}, normalized per 100 words. Causal strength grades the strongest claim sentence on a five-point scale from no-relation to unqualified causation, with negation scoped to clause boundaries so that a safety clause such as ``there were no dropouts'' cannot invert the efficacy claim that follows it. Numeric fidelity extracts effect sizes, confidence intervals, p-values, and percentages by pattern and scores exact retention against the source, excluding the confidence level itself so that preserving the boilerplate ``95\% CI'' earns no credit. Qualifier retention tracks population, dosage, and study-design phrases by token overlap. Entailment scores each generation against the source bidirectionally with a public NLI cross-encoder.
+
+The entailment instrument required a correction that we report because it nearly produced a false result, described in Section~\ref{sec:validation}.
+
+\subsection{Analysis}
+
+The estimand for H1 is the mean adjacent-generation change in each marker. We specified a mixed model with a random intercept per source abstract, with a cluster-robust OLS fallback; the fallback fired in every cell, because differencing removes the abstract-level intercept by construction and leaves no level variance for a random intercept to absorb. All reported standard errors are therefore clustered on the source abstract, which carries the dependence among the nine differences within a chain. Multiplicity across the five markers is handled by Holm correction within regime. H2 compares erosion of the core finding across claim classes. H3 interacts regime with step. All hypotheses, model specifications, and exclusion rules were fixed in a time-stamped preregistration in the repository.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{The drift is away from precision, not toward certainty}
+
+\begin{table}[t]
+\caption{Per-step drift by marker and regime over 360 chains. Cluster-robust standard errors in parentheses, clustered on source abstract; Holm-corrected within regime. $^{***}p<0.001$. The H1 verdict is relative to the preregistered prediction that drift runs toward greater certainty.}
+\label{tab:h1}
+\centering
+\begin{tabular}{lccc}
+\toprule
+Marker & Neutral regime & Conservative regime & H1 verdict \\
+\midrule
+Hedge density (/100 words) & $+0.0611$ $(0.0111)^{***}$ & $+0.0332$ $(0.0057)^{***}$ & reversed \\
+Causal strength (1--5) & $+0.0067$ $(0.0172)$ & $+0.0128$ $(0.0115)$ & null \\
+Numeric fidelity (exact share) & $-0.0459$ $(0.0034)^{***}$ & $-0.0093$ $(0.0017)^{***}$ & supported \\
+Qualifier retention & $-0.0486$ $(0.0036)^{***}$ & $-0.0112$ $(0.0022)^{***}$ & supported \\
+Bidirectional entailment & $-0.0677$ $(0.0016)^{***}$ & $-0.0278$ $(0.0013)^{***}$ & supported \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:h1} gives the per-step effects. Hedge density rises by $0.061$ per 100 words per generation under neutral prompting ($p = 6.9 \times 10^{-8}$), the opposite of the preregistered direction, and causal-claim strength does not move ($+0.0067$, $p = 0.70$). Over ten generations, mean hedge density climbs from $0.72$ to $1.33$ per 100 words, an $85\%$ increase. The two markers that were supposed to carry the certainty ratchet either run backwards or stay flat.
+
+The rise in density is a rise in proportion, not in raw count. The absolute number of hedges per summary does not grow; it is flat to slightly declining, at $-0.018$ per generation ($p = 0.25$), while neutral summaries shrink from 210 words to 116. Density climbs because numbers and qualifiers are shed faster than hedges are, so the hedges that survive occupy a larger share of a smaller text. This is not a length artifact in disguise, since regressing the per-step change in density on the per-step change in word count leaves a residual density increase of $+0.045$ per generation ($p < 10^{-3}$) that compression alone does not explain. The proportion is the epistemically relevant quantity in any case, because a reader consumes the text as delivered, and what is delivered is progressively more hedge and less substance.
+
+The reversal is not an artifact of one model. Hedge density rises in every model independently, with no sign flips on any marker: Qwen2.5-7B $+0.0499$ ($p = 8.0 \times 10^{-4}$), Phi-3.5-mini $+0.0969$ ($p = 6.2 \times 10^{-6}$), Mistral-7B $+0.0366$ ($p = 3.9 \times 10^{-4}$).
+
+What does degrade, steeply and consistently, is the precision of the claim. Exact retention of effect sizes, intervals, and p-values falls $0.046$ per generation, scope-qualifier retention falls $0.049$ per generation, and bidirectional entailment against the source falls $0.068$ per generation, all at $p < 10^{-40}$. Pooled over the neutral regime, numeric fidelity drops from $0.88$ to $0.42$ and qualifier retention from $0.98$ to $0.49$ across ten generations. A claim thus arrives at the end of a chain with roughly half its numbers, half its scope conditions, and nearly twice its original hedge density. That combination is not overconfidence; it is vagueness. The endpoint is a statement too imprecise to check rather than one that asserts more than the evidence supports.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig1_trajectories.pdf}
+\caption{Marker trajectories across ten generations, by model and regime. Solid lines are the neutral regime, dashed the conservative. Error bars are 95\% intervals on the cell mean. Hedge density rises while numeric fidelity, qualifier retention, and entailment fall; causal strength is flat.}
+\label{fig:drift}
+\end{figure}
+
+\subsection{The loss is front-loaded, not compounding}
+
+Figure~\ref{fig:drift} shows a shape the ratchet framing did not anticipate. Degradation is concentrated almost entirely in the first summarization. Numeric fidelity falls from $0.88$ to $0.52$ between the source and generation one, a loss of $41\%$ of the original content that accounts for $79\%$ of all numeric loss incurred across the full ten generations. Qualifier retention behaves the same way, with the first hop accounting for $52\%$ of total loss. After the first hop the curves flatten: whatever survives one summarization is comparatively robust to nine more.
+
+This matters more than the direction result for anyone designing interventions. Exponential compounding in depth would imply that shortening chains is the lever, and that a two-hop pipeline is far safer than a four-hop one. The measured shape says otherwise. The dominant risk is incurred at the transition from the source document to any machine summary of it, and further hops add comparatively little. Provenance requirements that reduce chain depth therefore buy far less than the compounding model predicts, while any policy that keeps a reader one hop from the source, or that preserves the source's numbers through the first hop, captures most of the available benefit.
+
+\subsection{Conservative prompting damps every rate and costs nothing}
+
+Instructing the model to preserve every hedge, qualifier, number, and statement of uncertainty reduces the drift magnitude of every marker without flipping any sign, which is what H3 predicted. Numeric loss falls by $79.7\%$ ($p = 9.8 \times 10^{-47}$ on the interaction), qualifier loss by $76.9\%$ ($p = 1.6 \times 10^{-27}$), entailment loss by $58.9\%$, and the hedge-density rise by $45.7\%$ ($p = 0.012$). At generation ten the conservative regime retains numeric fidelity of $0.79$ against $0.42$ under neutral prompting, and qualifier retention of $0.86$ against $0.49$.
+
+The intervention is close to free. Conservative summaries average 210 words against 156 for neutral ones, from a 227-word source, so the regime that preserves the science also stays closer to the original length rather than paying a compression penalty. Prompting does not solve the problem, since every rate remains significantly nonzero, but it is a large effect available at no computational cost.
+
+\subsection{Null results erode fastest, under the continuous test only}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig2_survival.pdf}
+\caption{Survival of the core finding under repeated summarization, by claim class and regime, with the erosion event defined as core-finding entailment falling below $0.5$. The neutral regime saturates at the first generation, which is why the preregistered log-rank comparison across classes has little room to discriminate.}
+\label{fig:halflife}
+\end{figure}
+
+The preregistered H2 test, the first generation at which core-finding entailment drops below $0.5$ compared across claim classes by log-rank, is null in both regimes (neutral $p = 0.40$, conservative $p = 0.21$). Figure~\ref{fig:halflife} shows why it has little power: under neutral prompting the median half-life is a single generation for every class, so the binary threshold is crossed almost immediately and almost universally.
+
+The continuous form of the same question does discriminate. Regressing core-finding entailment on generation interacted with a null-result indicator, over the neutral regime with errors clustered on abstract, gives a baseline decay of $-0.0078$ per generation ($p = 0.048$) and an additional $-0.0145$ per generation for null-result abstracts ($p = 0.041$). Null findings lose their core claim about $2.9$ times as fast as positive ones, the direction H2 predicted. Class trajectories bear this out: null-result core findings fall from $0.97$ to $0.21$ over ten generations, against $0.37$ for observational and $0.32$ for trial abstracts. We report this as secondary evidence. It is a single uncorrected test at $p = 0.041$ supplementing a preregistered test that came out null, and it deserves replication before it carries weight.
+
+One chain shows what the aggregate obscures. A null-result abstract on subclinical hypothyroidism and dyslipidemia in children concludes, in the source, that the association ``still seems to be inconsistent based on the results of this and previous studies''. By the first generation this has become ``no significant correlation was found'', and by the tenth it is flat assertion: ``the study concluded that there is no correlation between subclinical hypothyroidism and dyslipidemia in children''. All five statistics present in the source are gone. The claim has not been overstated in the usual direction, since it remains a null, but its epistemic status has been upgraded from an unresolved question to a settled fact, which for a null result is the analogous failure and arguably the more consequential one.
+
+\subsection{Temperature sensitivity}
+
+Rerunning a stratified 20-abstract subset through all three models at temperature $0.7$ reproduces every sign and nearly every magnitude: hedge density $+0.0515$ against $+0.0527$ for greedy decoding on the same abstracts, numeric fidelity $-0.0511$ against $-0.0399$, qualifier retention $-0.0546$ against $-0.0443$, and causal strength null in both. Information loss is if anything slightly steeper under sampling. Hedge density keeps its effect size but loses significance ($p = 0.09$) on the smaller subset, which is a power difference rather than a change in the estimate. The drift is not an artifact of greedy decoding.
+
+\subsection{From per-step rates to consumed claims}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig3_composition.pdf}
+\caption{Composing measured drift along real intermediation depths. Left: consumption-weighted depth distribution estimated from OpenAlex forward-citation paths over 30 seed works. Right: expected retention at depth under measured neutral-regime rates, with the $0.5$ calibration floor marked.}
+\label{fig:depth}
+\end{figure}
+
+A forward-citation walk over OpenAlex, starting from our seed abstracts and weighting each reached work by its own citation count, yields 2{,}327 consumption-weighted samples and puts the median intermediation depth of a consumed claim at two hops, with a 90th percentile of four. Composing the measured neutral-regime rates along this distribution, a claim at median consumption depth retains $86\%$ of its original qualifiers, and qualifier retention stays above a $0.5$ calibration floor out to ten hops. Hedge density rises rather than decays, so its per-step ratio exceeds one and no depth threshold bounds it from above.
+
+These composed figures are milder than the raw trajectories, and the reason is the front-loading result. Because the first hop dominates, the marginal cost of the second and third hops that typify real consumption is small, and the depth distribution is not where the danger lies. The quantity that matters is not how deep a reader sits in the citation graph but whether the text they read passed through any unassisted summarization at all. Two caveats bound this analysis: it treats a citation hop as a summarization event, which is an approximation, and it is estimated from 30 seed works.
+
+\section{Instrument validation, and a null that was not real}
+\label{sec:validation}
+
+Our first entailment run produced a clean H2 result: a median half-life of exactly one generation in every claim class, in both regimes, with log-rank $p = 0.70$. It looked like a tidy negative finding and it was entirely an artifact.
+
+The check that caught it is simple: a text must entail a sentence copied out of itself. Scoring each source abstract against its own core-finding sentence returned a mean entailment of $0.056$, when it should sit near one. The instrument was reporting almost nothing as supported, so every chain crossed the erosion threshold immediately and the classes became indistinguishable by construction. The cause was not truncation, since the median premise is 287 tokens against a 512-token limit. It was the model: a sentence-pair NLI cross-encoder is trained on single-sentence premises and mislabels document-length ones.
+
+Replacing whole-document scoring with granular aggregation in the style of SummaC \citep{laban2022summac}, comparing each hypothesis sentence against every premise sentence and keeping the best-supporting one, raised self-entailment to $0.944$ using the same model. All entailment numbers in this paper come from the corrected instrument, and the scoring pipeline now aborts if self-entailment falls below $0.80$.
+
+We report this at length because the failure mode generalizes. A saturating instrument does not announce itself; it produces well-formed survival curves, plausible medians, and a publishable null. Any study that thresholds a model-derived score and compares groups can fail this way, and a self-consistency check costs one line and catches it. We also note that backward entailment falls for any summary, because summaries drop content by design, so it measures compression as much as infidelity; forward entailment is the cleaner drift signal, falling from $0.97$ to $0.49$ under neutral prompting against $0.97$ to $0.78$ under conservative.
+
+\section{Discussion}
+
+The pipeline that carries science to its readers does not make claims bolder. It makes them blurrier. Across three model families, ten generations, and two prompting regimes, repeated summarization strips the numbers and the scope conditions that make a scientific claim checkable while sparing the hedges, so the surviving text reads as more tentative, and it leaves causal language untouched. A finding that began as a bounded quantitative statement about a specified population arrives as a hedged directional gesture. This is a different failure than the one the field has worried about, and in one respect a worse one: an overstated claim is at least falsifiable, and a reader who checks it against the source will notice the discrepancy, whereas a vague claim retains no purchase for the check to grip.
+
+The front-loading result redirects where effort should go. If loss compounded with depth, the intervention would be structural, shortening the chains between primary literature and readers. Because $79\%$ of numeric loss occurs at the first hop, the intervention is instead local: preserve the numbers and qualifiers through the single most important transition, from source document to first machine summary. Conservative prompting, which cuts numeric loss by $80\%$ at no cost in length, is one cheap version of that intervention, and the fact that a prompt achieves it suggests the information is not being lost for want of capacity.
+
+Beyond the specific numbers, the study argues for a methodological posture. Epistemic properties of AI-mediated communication are measurable with instruments anyone can run, and system-level consequences follow from laboratory rates by composition along measured usage structure, so debates about what AI does to science can proceed on quantities rather than impressions. The same posture demands that instruments be validated rather than trusted, as Section~\ref{sec:validation} shows, and that a preregistered hypothesis be allowed to fail loudly. Ours did.
+
+\section{Reproducibility}
+
+Everything needed to recompute every number in this paper is public at \url{https://github.com/garyzhang1006/ai-science-ratchet-data}. The release contains the 60-abstract corpus with stratum labels and the 20-abstract sensitivity subset; all 4{,}200 generations as JSONL, one file per model; the full per-generation score table; the hypothesis outputs with the estimator recorded per test; the OpenAlex depth distribution and the composition output; the three figures and the results table; and the time-stamped preregistration with its deviations section, which records both the estimator fallback and a model substitution. Chain generation ran on a single free-tier T4 in roughly five hours per model; every other stage runs on a laptop CPU in minutes. The instrument test suite, including the self-entailment gate described in Section~\ref{sec:validation}, runs with \texttt{python tests/test\_instruments.py} and \texttt{python tests/test\_regressions.py}.
+
+Two deviations from the preregistration are worth stating here. All H1 estimates come from the pre-specified cluster-robust OLS fallback rather than the mixed model, for the structural reason given in Section~\ref{sec:design}. The third model was specified as Llama-3.1-8B-Instruct and executed as Phi-3.5-mini-instruct, because the gated-model token was unavailable in the compute environment and the harness substitutes an ungated fallback automatically; the released model set is therefore fully ungated, which anyone replicating this work benefits from.
+
+\section{Limitations}
+
+Our chains are homogeneous, one model talking to itself, while real pipelines mix models, humans, and formats; the released harness accepts arbitrary chain compositions, and mixed chains are the natural next experiment. The three models are open-weight and 3.8--7B parameters, so behavior of frontier proprietary models is untested and could differ, particularly on hedging, which plausibly tracks instruction-tuning style. Rule-based instruments measure surface markers of epistemic stance rather than beliefs, and although the entailment arm guards the construct, a determined skeptic can read our effects as stylistic; we reply that consumed style is what downstream readers calibrate on. The depth distribution treats citation hops as summarization events and rests on 30 seed works, which makes the composition analysis the softest quantitative claim in the paper. Abstracts are not full papers, and drift measured on abstracts may differ from drift on sections. The secondary H2 result is a single uncorrected test. Finally, models improve, and the measured rates are a 2026 snapshot, which is why the harness matters more than the numbers.
+
+\section{Conclusion}
+
+We asked whether AI summarization of science drifts with a direction, preregistered the answer that it drifts toward certainty, and found the opposite. Hedge density rises, causal language holds still, and precision collapses, so the claims that reach readers through machine intermediaries are vaguer rather than bolder than the science they came from. The damage is concentrated in the first summarization, which means the intervention point is the first hop rather than the length of the chain, and a prompt that asks for caveats to be preserved recovers most of what is otherwise lost. All chains, code, instruments, preregistration, and measurements are released so that the rates can be recomputed as the models change.
+
+\begin{thebibliography}{9}
+
+\bibitem[Bartlett(1932)]{bartlett1932remembering}
+F.~C.~Bartlett.
+\newblock \emph{Remembering: A Study in Experimental and Social Psychology}.
+\newblock Cambridge University Press, 1932.
+
+\bibitem[Hyland(2005)]{hyland2005metadiscourse}
+K.~Hyland.
+\newblock \emph{Metadiscourse: Exploring Interaction in Writing}.
+\newblock Continuum, 2005.
+
+\bibitem[Kobak et al.(2024)]{kobak2024delving}
+D.~Kobak, R.~Gonz\'alez-M\'arquez, E.~\'A.~Horv\'at, and J.~Lause.
+\newblock Delving into LLM-assisted writing in biomedical publications through excess vocabulary.
+\newblock \emph{arXiv:2406.07016}, 2024.
+
+\bibitem[Laban et al.(2022)]{laban2022summac}
+P.~Laban, T.~Schnabel, P.~N.~Bennett, and M.~A.~Hearst.
+\newblock SummaC: Re-visiting NLI-based models for inconsistency detection in summarization.
+\newblock \emph{Transactions of the Association for Computational Linguistics}, 10:163--177, 2022.
+
+\bibitem[Liang et al.(2025)]{liang2024mapping}
+W.~Liang, Y.~Zhang, Z.~Wu, et~al.
+\newblock Quantifying large language model usage in scientific papers.
+\newblock \emph{Nature Human Behaviour}, 2025.
+
+\bibitem[Mohamed et al.(2025)]{mohamed2025telephone}
+A.~Mohamed, M.~Geng, M.~Vazirgiannis, and G.~Shang.
+\newblock LLM as a broken telephone: iterative generation distorts information.
+\newblock In \emph{Proceedings of ACL}, 2025.
+
+\end{thebibliography}
+
+\end{document}
