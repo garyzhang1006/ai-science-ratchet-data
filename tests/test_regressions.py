@@ -112,6 +112,20 @@ samples = walk({"id": "S"}, "", 4, 3, random.Random(0))
 ids_sampled = len(samples)
 check("openalex: diamond sampled once each (4 works)", ids_sampled == 4)
 
+# 9. the class label "null" must survive CSV round-trip (pandas parses the
+# bare string "null" as NaN by default, which silently drops a stratum)
+import tempfile
+from src.io_utils import read_scores
+with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as f:
+    f.write("pmid,cls,model,regime,generation,hedge_density\n")
+    f.write("1,null,m,neutral,0,0.5\n1,rct,m,neutral,0,0.5\n1,obs,m,neutral,0,\n")
+    path = f.name
+df = read_scores(path)
+check("io: class label 'null' survives read_scores",
+      sorted(df["cls"].astype(str)) == ["null", "obs", "rct"])
+check("io: empty numeric cell still reads as NaN",
+      df["hedge_density"].isna().sum() == 1)
+
 print()
 print("ALL PASS" if ok else "FAILURES PRESENT")
 sys.exit(0 if ok else 1)
