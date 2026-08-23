@@ -1,13 +1,16 @@
 """Compose measured per-step drift along the OpenAlex depth distribution.
 
-For share-type markers (hedge density, qualifier retention) the per-step
-multiplicative retention ratio rho is estimated from the neutral-regime
-trajectories as the mean of generation-over-generation ratios. Expected
-retention at depth d is rho**d; the consumption-weighted expectation over
-the depth distribution gives the state of a typically consumed claim.
+For share-type markers (hedge density, qualifier retention) retention at
+depth d is read straight off the measured neutral-regime trajectory,
+R(d) = mean(marker at generation d) / mean(marker at generation 0), for
+d = 0..10. A geometric rho**d model was used in an earlier version and is
+kept only as a reference field; it understates front-loaded loss because
+it averages the first hop's drop over ten steps. The consumption-weighted
+expectation sum_d w_d R(d) over the depth distribution (depths 1-4, all
+inside the measured range) gives the state of a typically consumed claim.
 Null-finding survival at depth d comes straight from the H2 survival rows.
 
-Policy quantity: d* = max depth with expected retention >= --threshold.
+Policy quantity: d* = max measured depth with R(d) >= --threshold.
 
 Usage:
   python -m src.compose --scores results/scores.csv \
@@ -55,24 +58,33 @@ def main():
     out = {"threshold": args.threshold,
            "median_depth": depths["median_depth"],
            "p90_depth": depths["p90_depth"], "markers": {}}
+    traj = neutral.groupby("generation").mean(numeric_only=True)
+    max_gen = int(traj.index.max())
     for marker in RATIO_MARKERS:
+        curve = [float(traj.loc[d, marker] / traj.loc[0, marker])
+                 for d in range(0, max_gen + 1)]
         rho = per_step_ratio(neutral, marker)
         med = depths["median_depth"]
-        expected_at_consumption = sum(w * rho ** d for d, w in dw.items())
-        # d* on integer depths 1..20
+        if max(dw) > max_gen:
+            raise SystemExit(f"depth distribution reaches {max(dw)} hops "
+                             f"but chains only go to {max_gen}")
+        expected_at_consumption = sum(w * curve[d] for d, w in dw.items())
         dstar = 0
-        for d in range(1, 21):
-            if rho ** d >= args.threshold:
+        for d in range(1, max_gen + 1):
+            if curve[d] >= args.threshold:
                 dstar = d
             else:
                 break
         share_beyond_dstar = sum(w for d, w in dw.items() if d > dstar)
         out["markers"][marker] = {
-            "per_step_ratio": rho,
-            "retention_at_median_depth": rho ** med if med else None,
+            "retention_curve": curve,
+            "first_hop_retention": curve[1],
+            "retention_at_median_depth": curve[med] if med else None,
             "expected_retention_at_consumption": expected_at_consumption,
             "d_star": dstar,
+            "d_star_is_measured_max": dstar == max_gen,
             "share_consumed_beyond_d_star": share_beyond_dstar,
+            "geometric_rho_for_reference": rho,
         }
 
     # null-finding death by median depth, from H2 survival rows
@@ -91,7 +103,7 @@ def main():
         json.dump(out, f, indent=2)
     print(f"[compose] wrote {args.out}")
     for m, v in out["markers"].items():
-        print(f"  {m}: rho={v['per_step_ratio']:.4f} "
+        print(f"  {m}: R(1)={v['first_hop_retention']:.3f} "
               f"E[retention@consumption]={v['expected_retention_at_consumption']:.3f} "
               f"d*={v['d_star']}")
 

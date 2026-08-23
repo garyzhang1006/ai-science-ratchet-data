@@ -95,17 +95,18 @@ def fig3(depths, composed, outdir):
     ax1.set_ylabel("Consumption weight")
     ax1.legend()
 
-    xs = np.arange(0, 11)
     for marker, v in composed["markers"].items():
-        ax2.plot(xs, v["per_step_ratio"] ** xs, marker="o", markersize=3,
+        curve = v["retention_curve"]
+        ax2.plot(np.arange(len(curve)), curve, marker="o", markersize=3,
                  label=LABELS.get(marker, marker))
     ax2.axhline(composed["threshold"], color="r", linestyle="--",
                 label=f"calibration floor {composed['threshold']}")
     if depths["median_depth"]:
         ax2.axvline(depths["median_depth"], color="k", linestyle=":")
     ax2.set_xlabel("Depth (hops)")
-    ax2.set_ylabel("Expected retention")
-    ax2.set_ylim(0, 1.05)
+    ax2.set_ylabel("Measured retention (relative to source)")
+    ax2.axhline(1.0, color="gray", linewidth=0.6)
+    ax2.set_ylim(bottom=0)
     ax2.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(outdir / "fig3_composition.pdf", bbox_inches="tight")

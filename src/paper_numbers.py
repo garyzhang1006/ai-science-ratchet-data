@@ -99,6 +99,8 @@ def main():
         "hedge_density_rise_pct": round(100 * (hedge[10] / hedge[0] - 1), 1),
         "numeric_g0": round(numeric[0], 3),
         "numeric_g1": round(numeric[1], 3),
+        "numeric_g2": round(numeric[2], 3),
+        "numeric_g4": round(numeric[4], 3),
         "numeric_g10": round(numeric[10], 3),
         "qualifier_g0": round(qual[0], 3),
         "qualifier_g10": round(qual[10], 3),
@@ -121,6 +123,20 @@ def main():
         "qualifier_first_hop_share_of_total_loss":
             round((qual[0] - qual[1]) / (qual[0] - qual[10]), 3),
     }
+
+    # 95% CI on the headline estimate, normal reference as in analysis.py.
+    r = json.load(open(release / "results" / "results.json"))
+    hd = next(x for x in r["H1_per_step_drift"]["neutral"] if x["marker"] == "hedge_density")
+    out["hedge_density_neutral_ci95"] = [round(hd["estimate"] - 1.96 * hd["se"], 3),
+                                         round(hd["estimate"] + 1.96 * hd["se"], 3)]
+    # H3 interaction p-values after Holm across the five markers.
+    h3 = r["H3_regime"]
+    ps = sorted((v["interaction_p"], k) for k, v in h3.items())
+    m, running, holm = len(ps), 0.0, {}
+    for rank, (pv, k) in enumerate(ps):
+        running = max(running, (m - rank) * pv)
+        holm[k] = float("%.3g" % min(1.0, running))
+    out["h3_interaction_p_holm"] = holm
 
     # Per-model hedge-density drift, neutral regime.
     out["hedge_density_by_model_neutral"] = {}
