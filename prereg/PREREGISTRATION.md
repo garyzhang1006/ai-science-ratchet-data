@@ -50,8 +50,8 @@ file is the time lock.
 
 ## Deviations
 
-None to the specification. One pre-specified fallback fired universally and
-is recorded here for transparency.
+Two, recorded below with dates: a pre-specified estimator fallback that fired
+universally, and a model substitution forced by the compute environment.
 
 **2026-08-15, estimator fallback.** In every marker-by-regime cell, the
 random-intercept variance of the mixed model was degenerate (singular
