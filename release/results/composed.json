@@ -1,21 +1,51 @@
 {
   "threshold": 0.5,
   "median_depth": 2,
-  "p90_depth": 4,
+  "p90_depth": 3,
   "markers": {
     "hedge_density": {
-      "per_step_ratio": 1.0581924561292955,
-      "retention_at_median_depth": 1.119771274208951,
-      "expected_retention_at_consumption": 1.1419195976432304,
-      "d_star": 20,
-      "share_consumed_beyond_d_star": 0
+      "retention_curve": [
+        1.0,
+        1.2058492892305965,
+        1.4382914040196502,
+        1.570377520107407,
+        1.624028797114146,
+        1.7284563630454748,
+        1.8089596616650236,
+        1.8222006081418538,
+        1.7807764746137178,
+        1.8823341227164603,
+        1.8529885963352168
+      ],
+      "first_hop_retention": 1.2058492892305965,
+      "retention_at_median_depth": 1.4382914040196502,
+      "expected_retention_at_consumption": 1.3836090616266108,
+      "d_star": 10,
+      "d_star_is_measured_max": true,
+      "share_consumed_beyond_d_star": 0,
+      "geometric_rho_for_reference": 1.0581924561292952
     },
     "qualifier_share": {
-      "per_step_ratio": 0.9349185128596893,
-      "retention_at_median_depth": 0.874072625687773,
-      "expected_retention_at_consumption": 0.8575198679158439,
+      "retention_curve": [
+        1.0,
+        0.7421052085521828,
+        0.6229026116683396,
+        0.5987721086582679,
+        0.5621279559266377,
+        0.5319338640189448,
+        0.5262301608916348,
+        0.5102428029330366,
+        0.508045878627065,
+        0.5079959485292019,
+        0.502054266883506
+      ],
+      "first_hop_retention": 0.7421052085521828,
+      "retention_at_median_depth": 0.6229026116683396,
+      "expected_retention_at_consumption": 0.6645831215716915,
       "d_star": 10,
-      "share_consumed_beyond_d_star": 0
+      "d_star_is_measured_max": true,
+      "share_consumed_beyond_d_star": 0,
+      "geometric_rho_for_reference": 0.9349185128596893
     }
   },
   "null_dead_by_median_depth_share": 0.6666666666666666

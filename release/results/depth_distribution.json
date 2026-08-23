@@ -1,14 +1,14 @@
 {
-  "n_seed_works": 30,
-  "n_samples": 2327,
+  "n_seed_works": 60,
+  "n_samples": 4920,
   "max_depth_walked": 4,
   "depth_weights": {
-    "1": 0.25249858570620404,
-    "2": 0.31879529107513266,
-    "3": 0.28714204897497375,
-    "4": 0.14156407424368955
+    "1": 0.4317279103020949,
+    "2": 0.24429741936948182,
+    "3": 0.27035338977280465,
+    "4": 0.0536212805556186
   },
   "median_depth": 2,
-  "p90_depth": 4,
+  "p90_depth": 3,
   "estimator_note": "Forward citation walk, review-preferring, branch-limited; endpoint weight = 1 + cited_by_count; one hop treated as one summarization event."
 }

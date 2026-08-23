@@ -1,0 +1,31 @@
+{
+  "n_abstracts": 60,
+  "causal_strengthen": {
+    "mean_before": 3.066666666666667,
+    "mean_after": 4.233333333333333,
+    "share_moved_intended": 0.43333333333333335,
+    "share_unchanged": 0.5666666666666667,
+    "share_moved_wrong_way": 0.0
+  },
+  "causal_weaken": {
+    "mean_before": 3.066666666666667,
+    "mean_after": 2.6166666666666667,
+    "share_moved_intended": 0.18333333333333332,
+    "share_unchanged": 0.8166666666666667,
+    "share_moved_wrong_way": 0.0
+  },
+  "hedge_add_one_per_sentence": {
+    "mean_before": 0.7164687386535468,
+    "mean_after": 5.6200361100007585,
+    "share_moved_intended": 1.0,
+    "share_unchanged": 0.0,
+    "share_moved_wrong_way": 0.0
+  },
+  "hedge_strip_all": {
+    "mean_before": 0.7164687386535468,
+    "mean_after": 0.0,
+    "share_moved_intended": 0.8166666666666667,
+    "share_unchanged": 0.18333333333333332,
+    "share_moved_wrong_way": 0.0
+  }
+}

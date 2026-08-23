@@ -24,9 +24,30 @@ import statsmodels.api as sm
 import sys as _sys, pathlib as _pl
 _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
 from src.io_utils import read_scores
-from src.instruments.hedges import hedge_count, word_count
+from src.instruments.hedges import _PATTERNS, hedge_count, word_count
 
 CASE_PMID = "32938413"  # the subclinical-hypothyroidism null case study
+
+# Items on Hyland's list that round or scope a quantity rather than mark
+# epistemic stance; removed for the epistemic-only density check.
+APPROXIMATORS = {"about", "around", "approximately", "roughly", "almost",
+                 "relatively", "quite", "rather", "somewhat", "fairly",
+                 "largely", "mainly", "mostly", "broadly", "generally",
+                 "often", "frequently", "sometimes", "usually", "typically",
+                 "typical", "in general", "in most cases", "in most instances"}
+
+
+def epistemic_hedge_count(text: str) -> int:
+    taken, n = [], 0
+    for pat in _PATTERNS:
+        for m in pat.finditer(text):
+            span = (m.start(), m.end())
+            if any(s < span[1] and span[0] < e for s, e in taken):
+                continue
+            taken.append(span)
+            if m.group(0).lower() not in APPROXIMATORS:
+                n += 1
+    return n
 
 
 def load_texts(release: pathlib.Path) -> pd.DataFrame:
@@ -47,6 +68,7 @@ def load_texts(release: pathlib.Path) -> pd.DataFrame:
     df = pd.DataFrame(rows)
     df["n_words"] = df["text"].map(word_count)
     df["n_hedges"] = df["text"].map(hedge_count)
+    df["n_epistemic"] = df["text"].map(epistemic_hedge_count)
     return df
 
 
@@ -145,6 +167,15 @@ def main():
                                   "hedge_density")
         out["hedge_density_by_model_neutral"][model] = {
             "estimate": round(est, 4), "p": float(f"{p:.2e}")}
+
+    # Epistemic-only hedge density: the rise with approximators removed.
+    tneut = tneut.copy()
+    tneut["epistemic_density"] = 100 * tneut["n_epistemic"] / tneut["n_words"]
+    est, p, _ = cluster_drift(tneut, "epistemic_density")
+    ep = tneut.groupby("generation")["epistemic_density"].mean()
+    out["hedge_density_epistemic_only_neutral"] = {
+        "per_step_drift": round(est, 4), "p": float(f"{p:.2g}"),
+        "g0": round(ep[0], 3), "g10": round(ep[10], 3)}
 
     # Hedge COUNT drift and word counts, neutral regime, from chain texts.
     est, p, n = cluster_drift(tneut, "n_hedges")
