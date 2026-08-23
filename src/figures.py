@@ -38,25 +38,36 @@ LABELS = {"hedge_density": "Hedge density (/100w)",
 
 
 def fig1(df, results, outdir):
-    fig, axes = plt.subplots(1, 5, figsize=(22, 4))
-    for ax, marker in zip(axes, MARKERS):
+    # Two rows of three so each panel is wide enough to read at column
+    # width; the sixth cell carries the shared legend.
+    fig, axes = plt.subplots(2, 3, figsize=(11, 6.2))
+    axes = axes.ravel()
+    colors = {}
+    for ax, marker in zip(axes[:5], MARKERS):
         for (model, regime), sub in df.groupby(["model", "regime"]):
             traj = sub.groupby("generation")[marker].agg(["mean", "sem"])
             style = "-" if regime == "neutral" else "--"
-            short = model.split("/")[-1]
+            short = model.split("/")[-1].replace("-Instruct", "").replace("-instruct", "")
+            if short not in colors:
+                colors[short] = "C%d" % len(colors)
             ax.errorbar(traj.index, traj["mean"], yerr=1.96 * traj["sem"],
-                        linestyle=style, marker="o", markersize=3,
-                        capsize=2, label=f"{short} ({regime})")
+                        linestyle=style, marker="o", markersize=2.5,
+                        capsize=2, linewidth=1.2, color=colors[short],
+                        label=f"{short}, {regime}")
         ax.set_xlabel("Generation")
-        ax.set_title(LABELS[marker], fontsize=10)
+        ax.set_title(LABELS[marker].replace("/100w", "per 100 words"), fontsize=10)
         est = next((r for r in results["H1_per_step_drift"].get("neutral", [])
                     if r["marker"] == marker and r.get("estimate") is not None),
                    None)
         if est:
-            ax.annotate(f"drift {est['estimate']:+.3f}/step\n"
-                        f"p={est['p_holm']:.3g}",
-                        xy=(0.05, 0.05), xycoords="axes fraction", fontsize=8)
-    axes[0].legend(fontsize=6, loc="upper right")
+            p = est["p_holm"]
+            ptxt = "p<1e-100" if p == 0 else ("p=%.2g" % p)
+            ax.annotate(f"neutral drift {est['estimate']:+.3f}/step, {ptxt}",
+                        xy=(0.03, 0.04), xycoords="axes fraction", fontsize=8)
+    handles, labels = axes[0].get_legend_handles_labels()
+    axes[5].axis("off")
+    axes[5].legend(handles, labels, loc="center", fontsize=9, frameon=False,
+                   title="solid: neutral, dashed: conservative")
     fig.tight_layout()
     fig.savefig(outdir / "fig1_trajectories.pdf", bbox_inches="tight")
     plt.close(fig)
@@ -91,6 +102,7 @@ def fig3(depths, composed, outdir):
     ax1.bar(list(dw.keys()), list(dw.values()), color="steelblue")
     ax1.axvline(depths["median_depth"], color="k", linestyle=":",
                 label=f"median = {depths['median_depth']}")
+    ax1.set_xticks(sorted(dw))
     ax1.set_xlabel("Intermediation depth (hops)")
     ax1.set_ylabel("Consumption weight")
     ax1.legend()

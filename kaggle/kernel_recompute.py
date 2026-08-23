@@ -33,8 +33,16 @@ else:
 os.chdir("repo")
 py = sys.executable
 
-sh([py, "-u", "-m", "src.openalex_depth", "--abstracts", "release/abstracts.jsonl",
-    "--max-seeds", "60", "--out", f"{W}/depth_distribution.json"])
+# Reuse the committed 60-seed walk when present so reruns for figure or
+# composition changes do not resample the live citation graph.
+released = "release/results/depth_distribution.json"
+if os.path.exists(released) and json.load(open(released)).get("n_seed_works") == 60:
+    import shutil
+    shutil.copy(released, f"{W}/depth_distribution.json")
+    print("[kernel] reusing released 60-seed depth distribution", flush=True)
+else:
+    sh([py, "-u", "-m", "src.openalex_depth", "--abstracts", "release/abstracts.jsonl",
+        "--max-seeds", "60", "--out", f"{W}/depth_distribution.json"])
 sh([py, "-m", "src.compose", "--scores", "release/results/scores.csv.gz",
     "--depths", f"{W}/depth_distribution.json",
     "--results", "release/results/results.json", "--out", f"{W}/composed.json"])
