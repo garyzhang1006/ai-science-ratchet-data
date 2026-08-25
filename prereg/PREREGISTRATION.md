@@ -1,8 +1,14 @@
 # Preregistration: The Certainty Ratchet
 
 Hypotheses, instruments, model specifications, and exclusion rules below
-were fixed before any chain was generated. The git commit timestamp of this
-file is the time lock.
+were fixed before any chain was generated. The git history of this file is
+the time lock, and it has four commits, so here is what each one did. The
+specification was created on 2026-08-13 (f266c20) and clarified the same
+day (788fdb6), both before the first chain was generated on 2026-08-15
+(7c0ed66); neither touched a hypothesis. The two deviations were logged on
+2026-08-15 (ec5038c) once the runs completed, which is what a deviations
+section is for. A fourth commit on 2026-08-22 (f2067b2) changed the
+deviations header from "None" to the count and altered no content.
 
 ## Hypotheses
 
