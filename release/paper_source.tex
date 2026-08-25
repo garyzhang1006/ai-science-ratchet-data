@@ -32,7 +32,7 @@ That prediction did not survive the data. Hedges grow denser per hundred words u
 
 The shape of the loss also came out wrong. Degradation is \emph{front-loaded}: the first summarization destroys $41\%$ of the numeric content of an abstract and accounts for $79\%$ of all numeric loss over ten generations, after which the curve flattens. This inverts the obvious policy response, since provenance rules that shorten citation chains buy much less than a compounding model predicts. The damage is already done at hop one, and a reader is better served by knowing whether the text in front of them passed through any unassisted summarization.
 
-Anyone can rerun our scoring, since it is automated and deterministic, and we never had to lean on a single annotator the way most integrity work does. We contribute (1) the first measurement of the \emph{direction} of LLM summarization drift on scientific claims, with preregistered hypotheses and automated scoring, (2) the finding that the direction is toward vagueness, replicated across three model families, and (3) the finding that loss is front-loaded, which changes where an intervention should bind. We also release a corpus of 4{,}200 scored generations and document an instrument failure, caught by a self-entailment check, that would otherwise have produced a clean, spurious null.
+Anyone can rerun our scoring, since it is automated and deterministic, and we never had to lean on a single human annotator the way most integrity work does. We contribute (1) the first measurement of the \emph{direction} of LLM summarization drift on scientific claims, with preregistered hypotheses and automated scoring, (2) the finding that the direction is toward vagueness, replicated across three model families, and (3) the finding that loss is front-loaded, which changes where an intervention should bind. We also release a corpus of 4{,}200 scored generations and document an instrument failure, caught by a self-entailment check, that would otherwise have produced a clean, spurious null.
 
 \section{Related work}
 
@@ -88,11 +88,11 @@ Nor, in a post hoc check, is the rise a matter of rounding words. Hyland's list 
 
 In each model separately, hedge density rises with no sign flips on any marker (uncorrected $p$): Qwen2.5-7B $+0.0499$ ($p = 4.0 \times 10^{-4}$), Phi-3.5-mini $+0.0969$ ($p = 3.1 \times 10^{-6}$), Mistral-7B $+0.0366$ ($p = 2.0 \times 10^{-4}$). Phi, the smallest of the three, shows the largest rise.
 
-In contrast, the precision of the claim degrades. Exact retention of effect sizes, intervals, and p-values falls $0.046$ per generation, scope-qualifier retention falls $0.049$ per generation, and bidirectional entailment against the source falls $0.068$ per generation, all at $p < 10^{-39}$. In the neutral regime, pooled numeric fidelity drops from $0.88$ to $0.42$ and qualifier retention from $0.98$ to $0.49$ across ten generations. By the end of a chain a claim keeps about half its numbers and half its scope conditions, at roughly double the hedge density it started with. What is left is vague: the claim is too imprecise to check, though it no longer overstates the evidence either.
+In contrast, the precision of the claim degrades. Exact retention of effect sizes, intervals, and p-values falls $0.046$ per generation, scope-qualifier retention falls $0.049$ per generation, and bidirectional entailment against the source falls $0.068$ per generation, all at $p < 10^{-39}$. In the neutral regime, pooled numeric fidelity drops from $0.88$ to $0.42$ and qualifier retention from $0.98$ to $0.49$ across ten generations. By the end of a chain a claim keeps about half its numbers and half its scope conditions, at roughly double the hedge density it started with. The surviving claim is vague: too imprecise to check, though it no longer overstates the evidence either.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\linewidth]{fig1_trajectories.pdf}
+\includegraphics[width=0.84\linewidth]{fig1_trajectories.pdf}
 \caption{Marker trajectories across ten generations, by model and regime. Solid lines are the neutral regime, dashed the conservative. Error bars are 95\% intervals on the cell mean. Hedge density rises while numeric fidelity, qualifier retention, and entailment fall; causal strength is flat.}
 \label{fig:drift}
 \end{figure}
@@ -101,19 +101,19 @@ In contrast, the precision of the claim degrades. Exact retention of effect size
 
 Figure~\ref{fig:drift} shows a shape we did not anticipate when we framed the ratchet. Numeric fidelity falls from $0.88$ to $0.52$ between the source and generation one, a loss of $41\%$ of the original content that accounts for $79\%$ of all numeric loss across the full ten generations. We see the same shape in qualifier retention, where the first hop accounts for $52\%$ of total loss. The curves then flatten. Whatever survives one summarization tends to survive nine more.
 
-For anyone designing interventions this shape counts for more than the direction result. Under exponential compounding, shortening chains would be the lever. In the measured data the dominant risk sits at the transition from the source document to any machine summary of it, and further hops add little. Cutting a pipeline from four hops to two moves numeric fidelity from $0.45$ to $0.49$, about three points of the original numbers, because most of them were gone after hop one. Provenance requirements that reduce chain depth therefore buy far less than the compounding model predicts. A policy that keeps a reader one hop from the source, or that preserves the source's numbers through the first hop, captures most of the available benefit.
+For anyone designing interventions this shape counts for more than the direction result. Under exponential compounding, shortening chains would be the lever. In the measured data the dominant risk sits at the transition from the source document to any machine summary of it, and further hops add little. Cutting a pipeline from four hops to two moves numeric fidelity from $0.45$ to $0.49$, about three points of the original numbers, because most of them were gone after hop one. A policy that keeps a reader one hop from the source, or that preserves the source's numbers through the first hop, captures most of the available benefit.
 
-\subsection{Conservative prompting damps every rate and stays within the source length}
+\subsection{Conservative prompting damps four of five rates and stays within the source length}
 
-Instructing the model to preserve every hedge, qualifier, number, and statement of uncertainty reduces the drift magnitude of every marker without flipping any sign. This confirms H3, and the damping is not small. Numeric loss falls by $79.7\%$ ($p = 9.8 \times 10^{-47}$ on the interaction), qualifier loss by $76.9\%$ ($p = 1.6 \times 10^{-27}$), entailment loss by $58.9\%$, and the hedge-density rise by $45.7\%$ ($p = 0.012$); all four survive Holm correction across the five markers. At generation ten, numeric fidelity of $0.79$ is retained under conservative prompting against $0.42$ under neutral, and qualifier retention of $0.86$ against $0.49$.
+Instructing the model to preserve every hedge, qualifier, number, and statement of uncertainty reduces the drift magnitude of four of the five markers without flipping any sign. H3 holds for those four, and the damping is not small. Causal strength, null in both regimes, drifts slightly further under the conservative prompt, and that difference is itself null ($p = 0.66$). Numeric loss falls by $79.7\%$ ($p = 9.8 \times 10^{-47}$ on the interaction), qualifier loss by $76.9\%$ ($p = 1.6 \times 10^{-27}$), entailment loss by $58.9\%$, and the hedge-density rise by $45.7\%$ ($p = 0.012$ raw, $0.024$ after Holm); all four survive Holm correction across the five markers. At generation ten, numeric fidelity of $0.79$ is retained under conservative prompting against $0.42$ under neutral, and qualifier retention of $0.86$ against $0.49$.
 
-The price is compression: conservative summaries average 195 words against 123 for neutral ones, from a 210-word source, so preserving the science means giving up most of the shortening, though the summaries still stay within the source length. However, every rate remains significantly nonzero, so prompting leaves the problem in place; it is a large effect available at no computational cost, a cheap trick for anyone who controls the prompt.
+The price is paid in compression: conservative summaries average 195 words against 123 for neutral ones, from a 210-word source, so preserving the science means giving up most of the shortening while staying within the source length. However, each of those four rates remains significantly nonzero under the conservative prompt, so prompting leaves the problem in place; it is a large effect available at no computational cost, a cheap trick for anyone who controls the prompt.
 
 \subsection{Null results erode fastest under the continuous test}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.85\linewidth]{fig2_survival.pdf}
+\includegraphics[width=0.80\linewidth]{fig2_survival.pdf}
 \caption{Survival of the core finding under repeated summarization, by claim class and regime, with the erosion event defined as core-finding entailment falling below $0.5$. The neutral regime saturates at the first generation, which is why the preregistered log-rank comparison across classes has little room to discriminate.}
 \label{fig:halflife}
 \end{figure}
@@ -150,7 +150,7 @@ The check that caught it asks whether a source abstract entails a sentence copie
 
 Following \citet{laban2022summac}, we replaced whole-document scoring with granular aggregation, comparing each hypothesis sentence against every premise sentence and keeping the best-supporting one, which raised self-entailment to $0.944$ with the same model. All entailment numbers in this paper come from the corrected instrument, and the scoring pipeline now aborts if self-entailment falls below $0.80$, a gate we set before rescoring.
 
-This one is worth dwelling on. Any study that thresholds a model-derived score and compares groups across it can saturate the same way, producing a clean survival curve and a publishable null that is really the instrument failing quietly. A self-consistency check costs one line and would have caught ours sooner. Backward entailment falls for any summary, because summaries drop content by design, so it measures compression as much as infidelity. Forward entailment is the cleaner drift signal, and it falls from $0.97$ to $0.49$ under neutral prompting against $0.97$ to $0.78$ under conservative.
+This one is worth dwelling on. Any study that thresholds a model-derived score and compares groups across it can saturate the same way, producing a clean survival curve and a publishable null out of an instrument that has quietly stopped discriminating. A self-consistency check costs one line and would have caught ours sooner. Backward entailment falls for any summary, because summaries drop content by design, so it measures compression as much as infidelity. Forward entailment is the cleaner drift signal, and it falls from $0.97$ to $0.49$ under neutral prompting against $0.97$ to $0.78$ under conservative.
 
 \section{Discussion}
 
@@ -170,7 +170,7 @@ Two diagnostic figures, the $0.056$ self-entailment mean and the 287-token media
 
 \section{Conclusion}
 
-We preregistered that summarization chains would drift toward certainty, and the chains did the opposite. Hedge density went up and precision fell apart, most of it in the first hop, while causal language never moved. The rates will have moved by the time anyone replicates them, which is why the harness matters more than the numbers we report. We would like to see it run on mixed human-and-model chains and on at least one frontier model, and to learn whether the front-loading holds when the source is a full paper instead of an abstract.
+We preregistered that summarization chains would drift toward certainty, and the chains did the opposite. Hedge density went up and precision fell apart, most of it in the first hop, while causal language never moved. The rates will have moved by the time anyone replicates them, which is why the harness matters more than the numbers we report. We would like to see it run on mixed human-and-model chains and on a frontier model, and to learn whether the front-loading holds for full papers.
 
 \begin{thebibliography}{9}
 
