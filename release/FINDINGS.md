@@ -12,7 +12,7 @@ The preregistered hypothesis predicted falling hedge density and rising
 causal strength. Hedge density rises instead, causal strength does not move,
 and what collapses is the precision of the claim.
 
-| Marker | Neutral per-step | Conservative per-step | Verdict |
+| Marker | Neutral per generation | Conservative per generation | Verdict |
 |---|---|---|---|
 | Hedge density (/100 words) | +0.0611 (0.0111) | +0.0332 (0.0057) | reversed |
 | Causal strength (1-5) | +0.0067 (0.0172) | +0.0128 (0.0115) | null |
@@ -103,13 +103,13 @@ and a p90 of 3. Composing measured neutral rates along that distribution, a
 claim at the median depth of two hops retains 62.3% of its qualifiers, the
 expectation over the whole depth distribution is 66.5%, and qualifier
 retention stays above the 0.5 floor out to 10 hops. Hedge density rises
-rather than decays, so its per-step ratio exceeds 1.
+rather than decays, so its per-generation ratio exceeds 1.
 
 ## What this means for the paper's framing
 
 The certainty-ratchet hypothesis does not survive the data. These chains
 describe a loss of precision rather than a gain of confidence: claims shed
-their numbers and scope conditions while accumulating hedges, so a
+their numbers and qualifiers while accumulating hedges, so a
 summarized finding drifts toward being unfalsifiable rather than toward
 being overstated. The title, abstract, and H1 need rewriting around
 vagueness.
@@ -134,7 +134,7 @@ was reporting almost nothing as supported. The cause was not truncation
 `cross-encoder/nli-deberta-v3-base` is trained on single-sentence premises
 and mislabels document-length ones.
 
-Replacing whole-document scoring with SummaC-style granular aggregation,
+Replacing whole-document scoring with SummaC-style sentence-level aggregation,
 each hypothesis sentence against every premise sentence keeping the
 best-supporting one, raised self-entailment to 0.944. The scoring kernel now
 aborts if that figure falls below 0.80, so this failure cannot pass silently
@@ -155,7 +155,7 @@ because the gated-model token was unavailable at run time.
 
 ## Files
 
-- `abstracts.jsonl` — the 60-abstract corpus with stratum labels
+- `abstracts.jsonl` — the 60-abstract corpus with class labels
 - `abstracts_sensitivity.jsonl` — the 20-abstract sensitivity subset
 - `chains/chains_*.jsonl.gz` — all 3600 main generations, one file per model
 - `chains/sens_*.jsonl.gz` — the 600 temperature-0.7 generations

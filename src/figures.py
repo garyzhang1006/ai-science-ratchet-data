@@ -1,12 +1,12 @@
 """Paper figures and Table 1.
 
 fig1  five panels, marker vs generation 0-10, one line per model x regime,
-      per-step fixed effects inset from results.json
+      per-generation fixed effects inset from results.json
 fig2  Kaplan-Meier survival of the core finding, by claim class, one panel
       per regime
 fig3  left: citation-depth distribution; right: composed expected
       retention vs depth with policy threshold line
-table1  LaTeX per-step fixed effects table
+table1  LaTeX per-generation fixed effects table
 
 Usage:
   python -m src.figures --scores results/scores.csv \

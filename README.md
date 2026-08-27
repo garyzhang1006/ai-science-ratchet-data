@@ -10,7 +10,7 @@ markers, hypothesis tests, OpenAlex depth composition, figures.
 | Step | Script | Where | Time |
 |---|---|---|---|
 | 1. Fetch 60 stratified PubMed OA abstracts | `src/fetch_abstracts.py` | laptop | ~10 min |
-| 2. Chains: 60 abstracts x 3 models x 2 regimes x depth 10 | `src/chains.py` via `kaggle/` | Kaggle T4 | 4.1 to 7.1 h per model as measured |
+| 2. Chains: 60 abstracts x 3 models x 2 regimes x depth 10 | `src/chains.py` via `kaggle/` | Kaggle T4 | 4.1 to 7.0 h per model as measured |
 | 3. Score 5 instruments on every generation | `src/score.py` | laptop | ~1-2 h (NLI on CPU) |
 | 4. H1-H3 tests | `src/analysis.py` | laptop | ~1 min |
 | 5. OpenAlex depth + composition | `src/openalex_depth.py`, `src/compose.py` | laptop | ~20 min |

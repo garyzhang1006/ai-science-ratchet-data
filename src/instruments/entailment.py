@@ -6,7 +6,7 @@ core-finding check: is the source's strongest claim sentence still entailed
 by the generation? Label indices are read from model config, never
 hardcoded. Runs on cuda, mps, or cpu.
 
-Aggregation is SummaC-style and granular rather than whole-document. A
+Aggregation is SummaC-style and sentence-level rather than whole-document. A
 sentence-pair NLI model is trained on single-sentence premises, so feeding
 it a 300-token abstract makes it report "not entailed" even for a claim
 copied verbatim out of that abstract; scoring each hypothesis sentence
@@ -59,7 +59,7 @@ class EntailmentScorer:
                             row[self.con_idx].item()))
         return out
 
-    def _granular(self, premise: str, hypothesis: str):
+    def _sentence_level(self, premise: str, hypothesis: str):
         """SummaC-style score: for each hypothesis sentence, the best
         entailment (and matching contradiction) over all premise sentences;
         the text-level score is the mean over hypothesis sentences."""
@@ -84,8 +84,8 @@ class EntailmentScorer:
         is every claim of the source still supported by the generation?
         Low means dropped content, so it falls for any summary and measures
         compression as much as infidelity."""
-        fwd_e, fwd_c = self._granular(source, gen)
-        bwd_e, bwd_c = self._granular(gen, source)
+        fwd_e, fwd_c = self._sentence_level(source, gen)
+        bwd_e, bwd_c = self._sentence_level(gen, source)
         return {"fwd_entail": fwd_e, "fwd_contra": fwd_c,
                 "bwd_entail": bwd_e, "bwd_contra": bwd_c,
                 "bi_entail": min(fwd_e, bwd_e)}
@@ -95,7 +95,7 @@ class EntailmentScorer:
         the generation."""
         if not core_sentence.strip():
             return float("nan")
-        e, _ = self._granular(gen, core_sentence)
+        e, _ = self._sentence_level(gen, core_sentence)
         return e
 
     def validate_self_entailment(self, texts):

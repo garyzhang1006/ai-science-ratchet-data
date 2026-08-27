@@ -6,9 +6,10 @@ Three claim classes, equal n per class:
   obs    observational studies with explicit association language
   null   abstracts whose conclusions state an explicit null result
 
-Operational null rule (documented for the paper's Appendix A): the abstract
-matches at least one null phrase (NULL_PHRASES) in its final third, and the
-abstract's causal-strength score comes from a negated trigger only.
+Operational null rule (stated in the paper's Design section): the abstract
+matches at least one null phrase (NULL_PHRASES) in its final third, and null
+takes priority over the other two classes when a query surfaces the abstract
+under more than one of them.
 
 Usage:
   python -m src.fetch_abstracts --per-class 20 --out data/abstracts.jsonl
@@ -152,7 +153,7 @@ def main():
         got = fetch_class(cls, args.per_class, seen)
         print(f"[fetch] {cls}: {len(got)}/{args.per_class}")
         if len(got) < args.per_class:
-            print(f"[fetch] WARNING: short stratum {cls}", file=sys.stderr)
+            print(f"[fetch] WARNING: short class {cls}", file=sys.stderr)
         rows += got
     with open(args.out, "w") as f:
         for r in rows:

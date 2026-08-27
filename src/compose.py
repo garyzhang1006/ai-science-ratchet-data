@@ -1,4 +1,4 @@
-"""Compose measured per-step drift along the OpenAlex depth distribution.
+"""Compose measured per-generation drift along the OpenAlex depth distribution.
 
 For share-type markers (hedge density, qualifier retention) retention at
 depth d is read straight off the measured neutral-regime trajectory,

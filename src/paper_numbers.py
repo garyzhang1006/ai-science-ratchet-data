@@ -195,7 +195,7 @@ def main():
                   & (texts["generation"] > 0)]["n_words"].mean(), 1),
     }
 
-    # Length control: per-step density change regressed on per-step word
+    # Length control: per-generation density change regressed on per-generation word
     # change; the intercept is the density drift compression cannot explain.
     d = tneut.sort_values("generation").copy()
     g = d.groupby(["pmid", "model", "regime"])

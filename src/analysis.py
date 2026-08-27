@@ -1,6 +1,6 @@
 """Hypothesis tests H1-H3 and all paper numbers.
 
-H1  per-step drift: for each marker and regime, the mean of adjacent-
+H1  per-generation drift: for each marker and regime, the mean of adjacent-
     generation differences, tested with a mixed model (random intercept per
     source abstract); falls back to OLS with cluster-robust SEs (clustered
     on abstract) when the mixed model fails or is degenerate. Holm
@@ -8,7 +8,7 @@ H1  per-step drift: for each marker and regime, the mean of adjacent-
 H2  erosion time: per chain, the first generation whose core-finding
     entailment drops below 0.5 (censored at max depth). Kaplan-Meier
     medians by claim class, log-rank test null vs non-null.
-H3  regime effect: per marker, OLS of per-step differences on regime with
+H3  regime effect: per marker, OLS of per-generation differences on regime with
     cluster-robust SEs; reduction share and sign-flip check.
 
 Writes results/results.json keyed to the paper's TK slots.
@@ -59,7 +59,7 @@ def holm(pvals):
 
 
 def drift_test(deltas: pd.DataFrame):
-    """Mean per-step drift with mixed model; cluster-robust OLS fallback.
+    """Mean per-generation drift with mixed model; cluster-robust OLS fallback.
     Returns (estimate, se, pvalue, method)."""
     deltas = deltas.copy()
     deltas["const"] = 1.0
