@@ -5,9 +5,9 @@ depth d is read straight off the measured neutral-regime trajectory,
 R(d) = mean(marker at generation d) / mean(marker at generation 0), for
 d = 0..10. A geometric rho**d model was used in an earlier version and is
 kept only as a reference field; it understates front-loaded loss because
-it averages the first hop's drop over ten steps. The consumption-weighted
+it averages the first hop's drop over ten steps. The citation-weighted
 expectation sum_d w_d R(d) over the depth distribution (depths 1-4, all
-inside the measured range) gives the state of a typically consumed claim.
+inside the measured range) gives the state of a claim at typical citation depth.
 Null-finding survival at depth d comes straight from the H2 survival rows.
 
 Policy quantity: d* = max measured depth with R(d) >= --threshold.

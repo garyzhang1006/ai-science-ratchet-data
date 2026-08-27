@@ -7,9 +7,9 @@ the current node) for up to --max-depth hops, sampling at most
 --branch citing works per node, preferring reviews (OpenAlex
 type "review" or title containing "review"/"meta-analysis") as
 citation hops. Each sampled endpoint contributes its citation count
-as a consumption weight at its path depth. The resulting weighted depth
+as a citation weight at its path depth. The resulting weighted depth
 histogram approximates how many summarization-like hops separate a primary
-claim from its typical point of consumption. Assumption, stated in the
+claim from a typical citing work. Assumption, stated in the
 paper's limitations: each citation hop is treated as one summarization
 event.
 
@@ -69,12 +69,12 @@ def is_reviewlike(w):
 
 
 def walk(seed_work, mailto, max_depth, branch, rng):
-    """Returns list of (depth, weight) consumption samples from one seed.
+    """Returns list of (depth, weight) citation-weighted samples from one seed.
 
     A `seen` set guards against convergent citation paths: each work is
     sampled and expanded at most once, at the depth where it was first
     reached, so diamonds in the citation graph cannot double-count a
-    subtree's consumption weight."""
+    subtree's citation weight."""
     samples = []
     seen = {seed_work["id"]}
     frontier = [(seed_work["id"], 0)]
@@ -136,7 +136,7 @@ def main():
         matched += 1
         s = walk(w, args.mailto, args.max_depth, args.branch, rng)
         all_samples += s
-        print(f"[openalex] pmid {pmid}: {len(s)} consumption samples",
+        print(f"[openalex] pmid {pmid}: {len(s)} citation-weighted samples",
               flush=True)
 
     if not all_samples:

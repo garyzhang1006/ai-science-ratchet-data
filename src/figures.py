@@ -104,7 +104,7 @@ def fig3(depths, composed, outdir):
                 label=f"median = {depths['median_depth']}")
     ax1.set_xticks(sorted(dw))
     ax1.set_xlabel("Citation depth (hops)")
-    ax1.set_ylabel("Consumption weight")
+    ax1.set_ylabel("Citation weight")
     ax1.legend()
 
     for marker, v in composed["markers"].items():

@@ -28,7 +28,7 @@ def _num(pattern):
 def test_composition_matches_released_json():
     depths = _load("depth_distribution.json")
     qual = _load("composed.json")["markers"]["qualifier_share"]
-    assert _num(r"produced\s+([\d,]+)\s*\n?consumption-weighted samples") == depths["n_samples"]
+    assert _num(r"produced\s+([\d,]+)\s*\n?citation-weighted samples") == depths["n_samples"]
     assert _num(r"median citation depth of (\d+) hops") == depths["median_depth"]
     assert _num(r"p90 of (\d+)") == depths["p90_depth"]
     assert abs(_num(r"retains ([\d.]+)% of its qualifiers")

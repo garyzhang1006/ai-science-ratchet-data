@@ -5,7 +5,7 @@ H1  per-step drift: for each marker and regime, the mean of adjacent-
     source abstract); falls back to OLS with cluster-robust SEs (clustered
     on abstract) when the mixed model fails or is degenerate. Holm
     correction across the five markers within each regime.
-H2  erosion half-life: per chain, the first generation whose core-finding
+H2  erosion time: per chain, the first generation whose core-finding
     entailment drops below 0.5 (censored at max depth). Kaplan-Meier
     medians by claim class, log-rank test null vs non-null.
 H3  regime effect: per marker, OLS of per-step differences on regime with

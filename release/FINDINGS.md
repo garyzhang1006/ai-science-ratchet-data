@@ -41,7 +41,7 @@ behaves the same way, with the first hop accounting for 52% of total loss.
 The preregistered test, first generation whose core-finding entailment drops
 below 0.5, compared by log-rank across claim classes, is null in both
 regimes (neutral p = 0.40, conservative p = 0.21). It saturates: in the
-neutral regime the median half-life is one generation for every class, which
+neutral regime the median survival time is one generation for every class, which
 leaves the binary test almost no room to discriminate.
 
 The continuous version of the same question does discriminate. Regressing
@@ -98,7 +98,7 @@ the estimate.
 ## Composition against real citation depth
 
 An OpenAlex forward-citation walk over 60 seed works produced 4920
-consumption-weighted samples, giving a median citation depth of 2 hops
+citation-weighted samples, giving a median citation depth of 2 hops
 and a p90 of 3. Composing measured neutral rates along that distribution, a
 claim at the median depth of two hops retains 62.3% of its qualifiers, the
 expectation over the whole depth distribution is 66.5%, and qualifier
@@ -117,7 +117,7 @@ vagueness.
 ## Instrument validation, and one failure that was caught
 
 The entailment instrument initially used whole-document NLI and produced a
-clean-looking H2 null with a median half-life of exactly 1.0 in every class.
+clean-looking H2 null with a median survival time of exactly 1.0 in every class.
 That null was an artifact. A validation check, whether a source abstract
 entails a sentence copied out of itself, returned 0.056, so the instrument
 was reporting almost nothing as supported. The cause was not truncation
