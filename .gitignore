@@ -10,3 +10,4 @@ __pycache__/
 SCAN_LEDGER.md
 /figures/
 .ratchet-release
+ste.py
