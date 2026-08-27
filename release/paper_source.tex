@@ -277,6 +277,6 @@ Each of the following cost us at least a day, and none would be visible in the r
 
 \textbf{Download backend.} Model downloads hung indefinitely on Kaggle with the default Hugging Face transfer backend; setting \texttt{HF\_HUB\_DISABLE\_XET=1} before importing the library fixed it.
 
-\textbf{Document-length premises.} Described in Section~\ref{sec:validation}; the sentence-level scorer splits both premise and hypothesis into sentences, takes the maximum entailment over premise sentences for each hypothesis sentence, and averages over hypothesis sentences, so the 512-token limit is never reached and the self-entailment gate holds at $0.944$.
+\textbf{Document-length premises.} Described in Section~\ref{sec:validation}; the sentence-level scorer splits both premise and hypothesis into sentences, takes the maximum entailment over premise sentences for each hypothesis sentence, and averages over hypothesis sentences, so the 512-token limit is never reached and the self-entailment gate reads $0.944$ on its validation subset.
 
 \end{document}

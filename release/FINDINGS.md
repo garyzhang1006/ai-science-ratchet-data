@@ -138,7 +138,9 @@ and mislabels document-length ones.
 
 Replacing whole-document scoring with SummaC-style sentence-level aggregation,
 each hypothesis sentence against every premise sentence keeping the
-best-supporting one, raised self-entailment to 0.944. The scoring kernel now
+best-supporting one, raised self-entailment to 0.944 on the 20-source
+validation subset the gate reads, and to 0.955 across all 60 sources.
+Three sources still score below the gate on their own core sentence. The scoring kernel now
 aborts if that figure falls below 0.80, so this failure cannot pass silently
 again. All numbers above come from the corrected instrument.
 
