@@ -16,7 +16,7 @@ and what collapses is the precision of the claim.
 |---|---|---|---|
 | Hedge density (/100 words) | +0.0611 (0.0111) | +0.0332 (0.0057) | reversed |
 | Causal strength (1-5) | +0.0067 (0.0172) | +0.0128 (0.0115) | null |
-| Numeric fidelity (exact share) | -0.0542 (0.0039) | -0.0101 (0.0018) | supported |
+| Numeric fidelity (exact share) | -0.0549 (0.0039) | -0.0104 (0.0018) | supported |
 | Qualifier retention | -0.0486 (0.0036) | -0.0112 (0.0022) | supported |
 | Bidirectional entailment | -0.0677 (0.0016) | -0.0278 (0.0013) | supported |
 
@@ -30,8 +30,8 @@ anywhere: Qwen +0.0499 (p = 4.0e-04), Phi +0.0969 (p = 3.1e-06), Mistral
 for the pooled estimates.
 
 Pooled neutral trajectories from generation 0 to 10: hedge density 0.72 to
-1.33, numeric fidelity 0.99 to 0.45, qualifier retention 0.98 to 0.49. The
-loss is front-loaded rather than compounding: numeric fidelity falls 0.99 to
+1.33, numeric fidelity 1.00 to 0.45, qualifier retention 0.98 to 0.49. The
+loss is front-loaded rather than compounding: numeric fidelity falls 1.00 to
 0.56 across the first hop alone, which is 44% of the original content and
 80% of all numeric loss incurred over ten generations. Qualifier retention
 behaves the same way, with the first hop accounting for 52% of total loss.
@@ -62,7 +62,7 @@ observational 0.95 to 0.37, randomized 0.94 to 0.32.
 
 ## H3: conservative prompting damps four of five rates and flips no sign
 
-Reduction in drift magnitude under conservative prompting: 81.4% for numeric
+Reduction in drift magnitude under conservative prompting: 81.1% for numeric
 fidelity, 76.9% for qualifier retention, 58.9% for bidirectional
 entailment, and 45.7% for hedge density. Causal strength is the
 exception: it is null in both regimes and drifts slightly further under the
@@ -86,7 +86,7 @@ magnitude.
 |---|---|---|
 | Hedge density | +0.0515 (p = 0.091) | +0.0527 (p = 0.0092) |
 | Causal strength | +0.0250 (p = 0.86) | +0.0283 (p = 0.36) |
-| Numeric fidelity | -0.0590 (p = 1.2e-11) | -0.0462 (p = 5.5e-15) |
+| Numeric fidelity | -0.0610 (p = 2.0e-11) | -0.0483 (p = 5.0e-15) |
 | Qualifier retention | -0.0546 (p = 1.9e-17) | -0.0443 (p = 2.8e-15) |
 
 No sign flips. The information-loss rates are slightly steeper under
@@ -119,9 +119,11 @@ vagueness.
 A second instrument fault was caught the same way, after the entailment one.
 The generation-side number extractor read the hyphen in a confidence interval
 ("0.544-0.866", the standard PubMed format) as a minus sign, so a preserved
-upper bound scored as lost. The corpus scored 0.88 against itself instead of
-the near-1.0 a self-comparison must give. With the sign rule corrected it
-scores 0.9881, and tests/test_instruments.py now gates on that. Every numeric
+upper bound scored as lost. A second fault had the same shape: a p-value
+written without its leading zero, as "P = .63", was extracted from the source
+and could not be matched back. The corpus scored 0.88 against itself instead
+of the 1.0 a self-comparison must give. With both corrected it scores exactly
+1.0, and tests/test_instruments.py now gates on that. Every numeric
 figure in the paper and in this note comes from the corrected extractor.
 
 

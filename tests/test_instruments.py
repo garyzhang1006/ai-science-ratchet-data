@@ -70,6 +70,13 @@ for sep in ("-", "\u2013", " to "):
     check_approx(f"numeric self-retention, separator {sep!r}",
                  numeric_fidelity(t, t)["share_exact"], 1.0)
 
+# APA-style p-values omit the leading zero. The generation-side pattern needed
+# a leading digit, so "P = .63" was extracted from the source and then never
+# matched back, which the 0.97 gate was too loose to catch.
+_apa = "The odds ratio was 1.08 (P = .63) and the risk ratio was 2.5 (P = .04)."
+check_approx("numeric self-retention, leading-decimal p-values",
+             numeric_fidelity(_apa, _apa)["share_exact"], 1.0)
+
 # Corpus-level gate: the instrument must not lose more than a few percent of
 # the corpus's own statistics to itself.
 import json, pathlib as _pl
@@ -79,7 +86,7 @@ if _corpus.exists():
                for r in (json.loads(l) for l in open(_corpus))]
     _shares = [x for x in _shares if x is not None]
     _mean = sum(_shares) / len(_shares)
-    check("numeric corpus self-retention >= 0.97", _mean >= 0.97, True)
+    check("numeric corpus self-retention == 1.0", abs(_mean - 1.0) < 1e-9, True)
     print(f"     corpus mean self-retention = {_mean:.4f} over {len(_shares)} abstracts")
 
 # The negation scope is documented to reset at a clause boundary. It reset

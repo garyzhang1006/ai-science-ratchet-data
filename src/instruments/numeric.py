@@ -36,7 +36,11 @@ RE_PERCENT = re.compile(
 # ("0.544-0.866", the standard PubMed format) is read as a minus sign,
 # so the upper bound becomes -0.866 and can never match the correctly
 # signed value the source-side RE_CI pattern extracted.
-RE_ANY_NUM = re.compile(r"(?<![\d.])[-+−]?\d+(?:\.\d+)?")
+# The alternation also accepts a bare leading decimal. Biomedical abstracts
+# write p-values as "P = .63", which the source-side RE_PVAL captures as
+# 0.63 while a generation-side pattern requiring a leading digit cannot
+# represent it, so a verbatim-preserved p-value scored as lost.
+RE_ANY_NUM = re.compile(r"(?<![\d.])[-+−]?(?:\d+(?:\.\d+)?|\.\d+)")
 
 
 def _to_float(s: str):
