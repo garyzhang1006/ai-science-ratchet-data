@@ -2,7 +2,7 @@
 import sys
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[1]))
 
-from src.instruments.hedges import hedge_density, hedge_count, word_count
+from src.instruments.hedges import hedge_density, hedge_count, word_count, HYLAND_HEDGES
 from src.instruments.causal import (causal_strength, core_claim_sentence,
                                     sentence_causal_strength)
 from src.instruments.numeric import extract_stats, numeric_fidelity
@@ -99,6 +99,34 @@ for _t in ("There were no dropouts; the treatment reduced anxiety.",
     check(f"negation does not cross a clause boundary: {_t[:34]}...",
           causal_strength(_t), 5)
 check("genuine negation still demotes", causal_strength("The treatment did not reduce anxiety."), 2)
+
+# The five-point causal scale, one probe per documented level plus the two
+# cases the implementation handles specially: a participle used adjectivally,
+# and a bare ambiguous verb licensed by a preceding evidence verb.
+for _t, _want in [
+    ("Coffee causes strokes.", 5),
+    ("Coffee may reduce stroke risk.", 4),
+    ("Coffee is linked to stroke risk.", 3),
+    ("Coffee is associated with strokes.", 2),
+    ("Coffee was not associated with strokes.", 1),
+    ("Coffee did not reduce stroke risk.", 2),
+    ("Coffee and strokes were measured.", 1),
+    ("Treatment was associated with increased risk.", 2),
+    ("The drug was shown to lower blood pressure.", 5),
+    ("Linked to lower risk of stroke.", 3),
+]:
+    check(f"causal scale: {_t[:38]}", sentence_causal_strength(_t), _want)
+
+# Hedge matching is case-insensitive and respects word boundaries, so a
+# sentence-initial hedge counts and "mayor" does not.
+for _t, _want in [("May reduce risk.", 1), ("It MAY reduce risk.", 1),
+                  ("The mayor approved it.", 0), ("(may) reduce risk", 1),
+                  ("It might. It could. It may.", 3)]:
+    check(f"hedge boundary: {_t[:34]!r}", hedge_count(_t), _want)
+
+# The hedge list is the size the paper claims.
+check("hedge list is 101 unique items",
+      len(set(HYLAND_HEDGES)), 101)
 
 # --- qualifiers ---
 src = ("In postmenopausal women, 50 mg/day of the drug was tested in a "
