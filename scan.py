@@ -6,14 +6,37 @@ mechanical ones so that every parent scan re-verifies the invariants.
 Usage: python3 scan.py [check ...]      (no args = run everything)
 """
 import json
+import os
 import pathlib
 import re
 import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
-TEX = (HERE / "paper.tex").read_text()
-RELEASE = pathlib.Path("/Users/garyzhang/claude/ai-science-ratchet-data/release")
+
+# Resolve both inputs without an absolute path, so this file runs unchanged
+# from a fresh clone of the data repository and carries no author identity.
+# In the repository the paper source ships as release/paper_source.tex; in the
+# working directory it is paper.tex beside this script.
+_TEX_CANDIDATES = [HERE / "paper.tex", HERE / "release" / "paper_source.tex"]
+_tex_path = next((p for p in _TEX_CANDIDATES if p.exists()), None)
+if _tex_path is None:
+    sys.exit("scan.py: found neither paper.tex nor release/paper_source.tex "
+             f"under {HERE}")
+TEX = _tex_path.read_text()
+
+# The release tree sits beside this script in the repository. When the script
+# runs from a separate paper directory, a one-line untracked pointer file names
+# it, or RATCHET_RELEASE does.
+_REL_CANDIDATES = [
+    pathlib.Path(os.environ["RATCHET_RELEASE"]) if os.environ.get("RATCHET_RELEASE") else None,
+    (HERE / ".ratchet-release").exists() and pathlib.Path((HERE / ".ratchet-release").read_text().strip()) or None,
+    HERE / "release",
+]
+RELEASE = next((p for p in _REL_CANDIDATES if p is not None and p.exists()), None)
+if RELEASE is None:
+    sys.exit("scan.py: no release tree found. Put its path in a .ratchet-release "
+             f"file beside this script, or set RATCHET_RELEASE. Looked under {HERE}.")
 
 
 def body():
@@ -118,6 +141,61 @@ def check_numbers():
     return ["untraceable number " + n for n in bad]
 
 
+def check_bindings():
+    """check_numbers only asks whether a token appears somewhere in the
+    release data. That passes even when a correct value is attached to the
+    wrong claim, which is the likely failure after a hand-edit of many
+    numbers at once. This binds each quoted claim to the field that must
+    produce it."""
+    res = json.load(open(RELEASE / "results/results.json"))
+    pn = json.load(open(RELEASE / "results/paper_numbers.json"))
+    sens = json.load(open(RELEASE / "results/results_sensitivity.json"))
+    comp = json.load(open(RELEASE / "results/composed.json"))
+
+    def h1(reg, marker, field="estimate"):
+        return [m for m in res["H1_per_step_drift"][reg]
+                if m["marker"] == marker][0][field]
+
+    def sens_est(marker):
+        return [m for m in sens["H1_per_step_drift"]["neutral"]
+                if m["marker"] == marker][0]["estimate"]
+
+    binds = [
+        ("hedge density rises by $0.061$", h1("neutral", "hedge_density"), 0.061),
+        ("p-values drops $0.054$ per generation", h1("neutral", "numeric_share_exact"), -0.054),
+        ("p-values falls $0.054$ per generation", h1("neutral", "numeric_share_exact"), -0.054),
+        ("qualifier retention falls $0.049$", h1("neutral", "qualifier_share"), -0.049),
+        ("entailment against the source falls $0.068$", h1("neutral", "bi_entail"), -0.068),
+        ("Numeric fidelity falls from $0.99$", pn["trajectories_neutral"]["numeric_g0"], 0.99),
+        ("falls from $0.99$ to $0.56$ between the source", pn["trajectories_neutral"]["numeric_g1"], 0.56),
+        ("falls only from $0.56$ to $0.45$", pn["trajectories_neutral"]["numeric_g10"], 0.45),
+        ("pooled numeric fidelity drops from $0.99$ to $0.45$", pn["trajectories_neutral"]["numeric_g10"], 0.45),
+        ("a loss of $44\\%$ of the original content", pn["front_loading"]["numeric_first_hop_share_of_original"], 0.44),
+        ("accounts for $80\\%$ of all numeric loss across", pn["front_loading"]["numeric_first_hop_share_of_total_loss"], 0.80),
+        ("Numeric loss falls by $81.4\\%$", res["H3_regime"]["numeric_share_exact"]["reduction_share"], 0.814),
+        ("qualifier loss by $76.9\\%$", res["H3_regime"]["qualifier_share"]["reduction_share"], 0.769),
+        ("entailment loss by $58.9\\%$", res["H3_regime"]["bi_entail"]["reduction_share"], 0.589),
+        ("hedge-density rise by $45.7\\%$", res["H3_regime"]["hedge_density"]["reduction_share"], 0.457),
+        ("numeric fidelity of $0.89$ is retained", pn["trajectories_conservative"]["numeric_g10"], 0.89),
+        ("against $0.45$ under neutral", pn["trajectories_neutral"]["numeric_g10"], 0.45),
+        ("numeric fidelity $-0.0590$ against", sens_est("numeric_share_exact"), -0.059),
+        ("$-0.0590$ against $-0.0462$", pn["greedy_drift_on_sensitivity_subset"]["numeric_share_exact"]["estimate"], -0.0462),
+        ("moves numeric fidelity from $0.48$", pn["trajectories_neutral"]["numeric_g4"], 0.48),
+        ("from $0.48$ to $0.52$, about four points", pn["trajectories_neutral"]["numeric_g2"], 0.52),
+        ("retains $62\\%$ of its original qualifiers", comp["markers"]["qualifier_share"]["retention_at_median_depth"], 0.62),
+        ("whole depth distribution is $66\\%$", comp["markers"]["qualifier_share"]["expected_retention_at_consumption"], 0.66),
+    ]
+    out = []
+    for quote, truth, stated in binds:
+        if quote not in TEX:
+            out.append(f"  MISSING claim in paper.tex: {quote}")
+        elif abs(abs(truth) - abs(stated)) >= 0.006:
+            out.append(f"  DRIFTED {quote!r}: paper says {stated}, data says {truth:.5f}")
+    if not out:
+        out.append(f"  {len(binds)} claim-to-value bindings verified")
+    return out
+
+
 def check_refs():
     labels = set(re.findall(r"\\label\{([^}]*)\}", TEX))
     refs = set(re.findall(r"\\ref\{([^}]*)\}", TEX))
@@ -146,6 +224,11 @@ def check_bib():
 
 
 def check_log():
+    # The compiled PDF lives in the working paper directory, not in the data
+    # repository, so this check reports that it cannot run rather than
+    # reporting a page-limit failure it has no evidence for.
+    if not (HERE / "paper.pdf").exists():
+        return ["skipped: no paper.pdf beside this script"]
     logp = HERE / "build.log"
     log = logp.read_text(errors="replace") if logp.exists() else ""
     out = ["LaTeX error: " + l.strip() for l in log.splitlines() if l.startswith("!")]
@@ -295,8 +378,11 @@ def check_abstract():
 
 def check_figures():
     out = []
+    # Figures sit beside the paper source in the working directory and under
+    # release/figures in the repository; look in both before reporting one
+    # missing.
     for f in re.findall(r"\\includegraphics\[[^\]]*\]\{([^}]*)\}", TEX):
-        if not (HERE / f).exists():
+        if not any((HERE / d / f).exists() for d in (".", "release/figures")):
             out.append("missing figure file " + f)
     for m in re.finditer(r"\\caption\{((?:[^{}]|\{[^{}]*\})*)\}", TEX):
         cap = m.group(1)
