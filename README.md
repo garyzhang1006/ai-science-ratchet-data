@@ -1,7 +1,7 @@
-# The Certainty Ratchet: data and code
+# The Vagueness Ratchet: data and code
 
-Pipeline for "The Certainty Ratchet: Directional Epistemic Drift in AI
-Summarization of Scientific Claims." Everything is automated: fetching
+Pipeline for "The Vagueness Ratchet: Repeated AI Summarization Makes
+Scientific Claims Less Precise, Not More Confident." Everything is automated: fetching
 stratified abstracts, running summarization chains, scoring five epistemic
 markers, hypothesis tests, OpenAlex depth composition, figures.
 
@@ -10,7 +10,7 @@ markers, hypothesis tests, OpenAlex depth composition, figures.
 | Step | Script | Where | Time |
 |---|---|---|---|
 | 1. Fetch 60 stratified PubMed OA abstracts | `src/fetch_abstracts.py` | laptop | ~10 min |
-| 2. Chains: 60 abstracts x 3 models x 2 regimes x depth 10 | `src/chains.py` via `kaggle/` | Kaggle T4 | ~8-11 h per model |
+| 2. Chains: 60 abstracts x 3 models x 2 regimes x depth 10 | `src/chains.py` via `kaggle/` | Kaggle T4 | 4.1 to 7.1 h per model as measured |
 | 3. Score 5 instruments on every generation | `src/score.py` | laptop | ~1-2 h (NLI on CPU) |
 | 4. H1-H3 tests | `src/analysis.py` | laptop | ~1 min |
 | 5. OpenAlex depth + composition | `src/openalex_depth.py`, `src/compose.py` | laptop | ~20 min |
@@ -29,13 +29,16 @@ bash kaggle/push_kernels.sh <kaggle-username>
 Pushes three private script kernels (one model each: Qwen2.5-7B,
 Llama-3.1-8B, Mistral-7B-v0.3), each T4 + internet. Add a Kaggle secret
 `HF_TOKEN` for the gated Llama model; without it the kernel swaps in
-Phi-3.5-mini automatically. Download each kernel's output
+Phi-3.5-mini automatically. In the released run the swap fired, because an
+account-level secret is not visible to a notebook unless the notebook opts
+in, so the third model is Phi-3.5-mini and the release needs no gated token
+to reproduce. Download each kernel's output
 `chains_*.jsonl` and `abstracts.jsonl` into `data/`, then continue with
 step 3. Kernels resume if interrupted: attach the previous run's output as
 an input dataset and re-run.
 
-Before first push: set your GitHub username in `REPO` inside
-`kaggle/kernel_ratchet.py` (placeholder `GARYZHANG_GH_USER`).
+Before first push: point `REPO` inside each `kaggle/kernel_*.py` at your own
+fork, since the kernels clone that URL to get the code and corpus.
 
 ## Instruments
 
@@ -55,12 +58,33 @@ rescore with instruments of their own choosing.
 
 ## Outputs
 
-- `results/scores.csv` -- one row per (abstract, model, regime, generation)
-- `results/results.json` -- H1 drift estimates, H2 half-lives, H3 regime
-  effects, mapped 1:1 to the paper's TK slots
-- `results/depth_distribution.json`, `results/composed.json` -- OpenAlex
-  intermediation depths and composed retention, with `d_star`
+A fresh run writes into `results/` and `figures/out/`. The frozen copies the
+paper cites live under `release/`, which is what to read if you want the
+published numbers rather than your own rerun.
+
+- `scores.csv` -- one row per (abstract, model, regime, generation); the
+  released copy is `release/results/scores.csv.gz`
+- `results.json` -- H1 per-generation drift estimates, H2 median survival
+  times, H3 regime interactions, each with the estimator recorded per test
+- `depth_distribution.json`, `composed.json` -- OpenAlex citation depths and
+  composed retention, with `d_star`
+- `paper_numbers.json` -- every in-text figure the paper quotes, recomputed
+  by `src/paper_numbers.py`
 - `figures/out/` -- fig1-fig3 PDFs and `table1.tex`
+
+## Tests
+
+```bash
+python tests/test_instruments.py
+python tests/test_regressions.py
+python tests/test_release_consistency.py
+```
+
+They run as plain scripts. `test_instruments.py` gates numeric and qualifier
+self-retention, meaning a text scored against itself must keep its own
+statistics; that gate is what caught a confidence-interval hyphen being read
+as a minus sign. `test_release_consistency.py` fails if the prose in
+`release/FINDINGS.md` drifts away from the released JSON.
 
 ## Setup
 
