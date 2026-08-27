@@ -27,6 +27,11 @@ matplotlib.use("Agg")
 # unreadable.
 COLUMN_IN = 5.4
 matplotlib.rcParams.update({
+    # Matplotlib defaults to Type 3 fonts in PDF, which do not scale, search
+    # or copy cleanly and which several venues reject outright. 42 emits
+    # TrueType instead.
+    "pdf.fonttype": 42,
+    "ps.fonttype": 42,
     "font.size": 6.5,
     "axes.titlesize": 7.0,
     "axes.labelsize": 6.5,
