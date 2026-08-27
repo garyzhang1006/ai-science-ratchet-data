@@ -43,9 +43,9 @@ We contribute (1) the first measurement of the \emph{direction} of LLM summariza
 
 \section{Related work}
 
-Iterative generation distorts text in measurable ways: \citet{mohamed2025telephone} ran chains of translation and paraphrase through open-weight models and documented cumulative factual drift, its dependence on language and chain design, and its partial mitigation by constrained prompting. \citet{shumailov2024collapse} showed the training-side analogue, model collapse under recursively generated data. However, neither scores the epistemic direction of the movement on scientific material, which is our object. Serial reproduction in humans, from Bartlett's original experiments onward~\citep{bartlett1932remembering} to the iterated-learning laboratory of \citet{kirby2008cumulative}, shows systematic conventionalization and sharpening, and our design is the LLM analogue of that tradition with instruments in place of annotators. Our result has the opposite direction, because human serial reproduction increases the definiteness of the material and model serial reproduction decreases it.
+Iterative generation distorts text in measurable ways: \citet{mohamed2025telephone} ran chains of translation and paraphrase through open-weight models and documented cumulative factual drift, its dependence on language and chain design, and its partial mitigation by constrained prompting. \citet{shumailov2024collapse} showed the training-side analogue, model collapse under recursively generated data. \citet{belem2026certainty} measured expressed certainty under repeated LM rewriting and found it rising, the direction we preregistered and did not see; their chains rewrite at length while ours summarize. Serial reproduction in humans, from Bartlett's original experiments onward~\citep{bartlett1932remembering} to the iterated-learning laboratory of \citet{kirby2008cumulative}, shows systematic conventionalization and sharpening, and \citet{acerbi2023biases} ran that paradigm through an LLM, recovering the same content biases as human chains. We score scientific claims with instruments in place of annotators. Our result has the opposite direction under summarization, because human serial reproduction increases the definiteness of the material and repeated summarization decreases it.
 
-On the science-communication side, \citet{sumner2014exaggeration} found that exaggerated causal claims in health news track exaggeration already present in the academic press release, and \citet{yavchitz2012misrepresentation} traced spin in press releases to the trial's own abstract, a human baseline our pipeline might have automated. Closest to our question, \citet{peters2025generalization} compared 4{,}900 single-step LLM summaries with their sources and found that most models broadened the scope of the conclusions, nearly five times as often as human summaries did. We ask what happens to scope, hedging, and numbers over repeated summarization and where along the chain the loss falls. Hedging has quantitative traditions in applied linguistics and a shared task in NLP~\citep{farkas2010conll}; we take our hedge list straight from \citet{hyland2005metadiscourse}. \citet{liang2024mapping} and \citet{kobak2024delving} estimated that LLMs already touch a substantial share of scientific text, which is why a per-generation bias here carries population-level consequences.
+On the science-communication side, \citet{sumner2014exaggeration} found that exaggerated causal claims in health news track exaggeration already present in the academic press release, and \citet{yavchitz2012misrepresentation} traced spin in press releases to the trial's own abstract. Closest to our question, \citet{peters2025generalization} compared 4{,}900 single-step LLM summaries with their sources and found that most models broadened the scope of the conclusions, nearly five times as often as human summaries did. Hedging has quantitative traditions in applied linguistics and a shared task in NLP~\citep{farkas2010conll}; we take our hedge list straight from \citet{hyland2005metadiscourse}. \citet{liang2024mapping} and \citet{kobak2024delving} estimated that LLMs already touch a substantial share of scientific text, which is why a per-generation bias here carries population-level consequences.
 
 \section{Design}
 \label{sec:design}
@@ -179,10 +179,20 @@ We preregistered that summarization chains would drift toward certainty, and the
 
 \begin{thebibliography}{9}
 
+\bibitem[Acerbi and Stubbersfield(2023)]{acerbi2023biases}
+A.~Acerbi and J.~M. Stubbersfield.
+\newblock Large language models show human-like content biases in transmission chain experiments.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 120(44):e2313790120, 2023.
+
 \bibitem[Bartlett(1932)]{bartlett1932remembering}
 F.~C.~Bartlett.
 \newblock \emph{Remembering: A Study in Experimental and Social Psychology}.
 \newblock Cambridge University Press, 1932.
+
+\bibitem[Belem et al.(2026)]{belem2026certainty}
+C.~G. Belem, S.~Wu, H.~Yao, M.~Steyvers, S.~Singh, and P.~Smyth.
+\newblock From ``may'' to ``is'': Certainty distortion in language model rewriting.
+\newblock \emph{arXiv:2606.07951}, 2026.
 
 \bibitem[Farkas et al.(2010)]{farkas2010conll}
 R.~Farkas, V.~Vincze, G.~M\'ora, J.~Csirik, and G.~Szarvas.
