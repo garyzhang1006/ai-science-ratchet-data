@@ -210,6 +210,27 @@ def main():
         "word_slope": round(float(fit.params["d_words"]), 5),
     }
 
+    # Second compression control: change the denominator instead of
+    # regressing the word-count change out. If the density rise were an
+    # artifact of shrinking summaries, normalizing by sentences would remove it.
+    from src.instruments.hedges import hedge_count as _hc
+    from src.instruments.causal import split_sentences as _ss
+    _hs = texts[texts["regime"].isin([None, "neutral"]) | texts["regime"].isna()].copy()
+    _hs = _hs[(_hs["generation"] == 0) | (_hs["regime"] == "neutral")].copy()
+    _hs["per_sent"] = _hs["text"].map(lambda t: _hc(t) / max(1, len(_ss(t))))
+    _hs = _hs.sort_values(["pmid", "model", "generation"])
+    _hs["delta"] = _hs.groupby(["pmid", "model"])["per_sent"].diff()
+    _hs = _hs.dropna(subset=["delta"])
+    _X = sm.add_constant(pd.DataFrame({"_z": [0.0] * len(_hs)}, index=_hs.index))[["const"]]
+    _fit = sm.OLS(_hs["delta"], _X).fit(cov_type="cluster",
+                                        cov_kwds={"groups": _hs["pmid"]})
+    out["hedges_per_sentence_neutral"] = {
+        "slope": round(float(_fit.params["const"]), 4),
+        "se": round(float(_fit.bse["const"]), 4),
+        "p": float(f"{_fit.pvalues['const']:.2e}"),
+        "n_deltas": int(len(_hs)),
+    }
+
     # Continuous H2: core-finding entailment on generation x null indicator,
     # neutral regime, errors clustered on abstract. Reported on the full
     # chain and again on generations 1..D, i.e. after the first hop, because

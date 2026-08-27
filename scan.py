@@ -182,6 +182,8 @@ def check_bindings():
         ("$-0.0590$ against $-0.0462$", pn["greedy_drift_on_sensitivity_subset"]["numeric_share_exact"]["estimate"], -0.0462),
         ("moves numeric fidelity from $0.48$", pn["trajectories_neutral"]["numeric_g4"], 0.48),
         ("from $0.48$ to $0.52$, about four points", pn["trajectories_neutral"]["numeric_g2"], 0.52),
+        ("$+0.0120$ hedges per sentence per generation",
+         pn["hedges_per_sentence_neutral"]["slope"], 0.0120),
         ("about $1.6$ times as many words",
          pn["word_counts"]["conservative_summary_mean"] / pn["word_counts"]["neutral_summary_mean"], 1.6),
         ("retains $62\\%$ of its original qualifiers", comp["markers"]["qualifier_share"]["retention_at_median_depth"], 0.62),

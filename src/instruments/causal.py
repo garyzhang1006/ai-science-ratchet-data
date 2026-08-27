@@ -69,9 +69,14 @@ _NEG_WINDOW = 40  # characters before the trigger scanned for negation
 
 
 # A clause boundary resets the negation scope: "There were no dropouts;
-# the treatment reduced anxiety" must not read the unrelated "no".
+# the treatment reduced anxiety" must not read the unrelated "no". A
+# coordinating conjunction opens a new clause whether or not a comma precedes
+# it, so the third branch is needed; without it the documented example fails
+# in its commaless form and the safety clause inverts the efficacy claim.
 RE_CLAUSE_BOUNDARY = re.compile(
-    r"[;:]|,\s*(?:and|but|while|whereas|although)\b", re.IGNORECASE)
+    r"[;:]"
+    r"|,\s*(?:and|but|while|whereas|although)\b"
+    r"|\s+(?:and|but|while|whereas|although)\s+", re.IGNORECASE)
 
 
 def _negated(sentence: str, start: int) -> bool:

@@ -82,6 +82,17 @@ if _corpus.exists():
     check("numeric corpus self-retention >= 0.97", _mean >= 0.97, True)
     print(f"     corpus mean self-retention = {_mean:.4f} over {len(_shares)} abstracts")
 
+# The negation scope is documented to reset at a clause boundary. It reset
+# only after a comma, so the docstring's own example failed in its commaless
+# form and a safety clause inverted the efficacy claim that followed it.
+for _t in ("There were no dropouts; the treatment reduced anxiety.",
+           "There were no dropouts, and the treatment reduced anxiety.",
+           "There were no dropouts and the treatment reduced anxiety.",
+           "There was no serious toxicity and the drug reduced tumor size."):
+    check(f"negation does not cross a clause boundary: {_t[:34]}...",
+          causal_strength(_t), 5)
+check("genuine negation still demotes", causal_strength("The treatment did not reduce anxiety."), 2)
+
 # --- qualifiers ---
 src = ("In postmenopausal women, 50 mg/day of the drug was tested in a "
        "randomized double-blind placebo-controlled trial.")

@@ -71,6 +71,12 @@
     "p": 0.000153,
     "word_slope": -0.00173
   },
+  "hedges_per_sentence_neutral": {
+    "slope": 0.012,
+    "se": 0.0021,
+    "p": 6.74e-09,
+    "n_deltas": 1800
+  },
   "h2_continuous_neutral": {
     "core_entail_g0_null": 0.971,
     "core_entail_g10_null": 0.21,
