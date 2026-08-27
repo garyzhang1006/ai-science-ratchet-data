@@ -99,8 +99,8 @@ In contrast, the precision of the claim degrades: exact retention of effect size
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.74\linewidth]{fig1_trajectories.pdf}
-\caption{Marker trajectories across ten generations, by model and regime. Solid lines are the neutral regime, dashed the conservative. Error bars are 95\% intervals on the cell mean. Hedge density rises while numeric fidelity, qualifier retention, and entailment fall; causal strength is flat.}
+\includegraphics[width=0.98\linewidth]{fig1_trajectories.pdf}
+\caption{Marker trajectories across ten generations, by model and regime. Solid lines are the neutral regime, dashed the conservative. Error bars are 95\% intervals on the cell mean. Hedge density rises while numeric fidelity, qualifier retention, and entailment fall; causal strength is flat. Table~\ref{tab:h1} gives the per-generation estimates.}
 \label{fig:drift}
 \end{figure}
 
@@ -114,13 +114,13 @@ For anyone designing interventions, this shape counts for more than the directio
 
 Instructing the model to preserve every hedge, qualifier, number, and statement of uncertainty reduces the drift magnitude of four of the five markers without flipping any sign, so H3 holds for those four. Causal strength, null in both regimes, drifts slightly further under the conservative prompt, and that difference is itself null ($p = 0.66$). Numeric loss falls by $81.4\%$ ($p = 1.2 \times 10^{-41}$ on the interaction), qualifier loss by $76.9\%$ ($p = 1.6 \times 10^{-27}$), entailment loss by $58.9\%$, and the hedge-density rise by $45.7\%$ ($p = 0.012$ raw, $0.024$ after Holm), so all four survive Holm correction. At generation ten, numeric fidelity of $0.89$ is retained under conservative prompting against $0.45$ under neutral, and qualifier retention of $0.86$ against $0.49$.
 
-The price is paid in compression: conservative summaries average 195 words against 123 for neutral ones, from a 210-word source, so preserving hedges, numbers, and qualifiers costs most of the shortening. However, each of those four rates remains significantly nonzero under the conservative prompt, so prompting leaves the problem in place; the effect is large and costs no additional computation.
+The price is paid in compression: conservative summaries average 195 words against 123 for neutral ones, from a 210-word source, so preserving hedges, numbers, and qualifiers costs most of the shortening. However, each of those four rates remains significantly nonzero under the conservative prompt, so prompting reduces the problem without removing it.
 
 \subsection{Null results erode fastest under the continuous test}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.76\linewidth]{fig2_survival.pdf}
+\includegraphics[width=0.98\linewidth]{fig2_survival.pdf}
 \caption{Survival of the core finding under repeated summarization, by claim class and regime, with the erosion event defined as core-finding entailment falling below $0.5$. The neutral regime saturates at the first generation, which is why the preregistered log-rank comparison across classes has little room to discriminate.}
 \label{fig:halflife}
 \end{figure}
@@ -139,7 +139,7 @@ Rerunning a stratified 20-abstract subset through all three models at temperatur
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.76\linewidth]{fig3_composition.pdf}
+\includegraphics[width=0.98\linewidth]{fig3_composition.pdf}
 \caption{Composing measured drift along real citation depths. Left: citation-weighted depth distribution from OpenAlex forward-citation paths seeded by all 60 source abstracts. Right: retention at each depth read from the measured neutral-regime trajectories, relative to the source, with the $0.5$ floor marked.}
 \label{fig:depth}
 \end{figure}
@@ -157,15 +157,15 @@ The check that caught it asks whether a source abstract entails a sentence copie
 
 Following \citet{laban2022summac}, we replaced whole-document scoring with sentence-level NLI aggregation, comparing each hypothesis sentence against every premise sentence and keeping the best-supporting one, which raised self-entailment to $0.944$ with the same model. All entailment numbers in this paper come from the corrected instrument, and the scoring pipeline now aborts if self-entailment falls below $0.80$, a gate we set before rescoring.
 
-Any study that thresholds a model-derived score and compares groups across it can saturate the same way, producing a clean survival curve and a publishable null from an instrument that no longer discriminates between the groups. A self-consistency check costs one line and would have caught ours sooner. The same check on the number extractor caught a second fault, a confidence-interval hyphen read as a minus sign, which scored preserved upper bounds as lost; with the extractor corrected, the corpus scores $0.99$ against itself instead of $0.88$, and every numeric figure here uses the corrected extractor. Backward entailment falls for any summary, because summaries drop content by design, so it measures compression as much as infidelity. Forward entailment is the cleaner drift signal, and it falls from $0.97$ to $0.49$ under neutral prompting against $0.97$ to $0.78$ under conservative.
+Any study that thresholds a model-derived score and compares groups across it can saturate the same way, producing a clean survival curve and a publishable null. A self-consistency check costs one line and would have caught ours sooner. The same check on the number extractor caught a second fault, a confidence-interval hyphen read as a minus sign, which scored preserved upper bounds as lost; with the extractor corrected, the corpus scores $0.99$ against itself instead of $0.88$, and every numeric figure here uses the corrected extractor. Backward entailment falls for any summary, because summaries drop content by design, so it measures compression as much as infidelity. Forward entailment is the cleaner drift signal, and it falls from $0.97$ to $0.49$ under neutral prompting against $0.97$ to $0.78$ under conservative.
 
 \section{Discussion}
 
-Repeated summarization makes scientific claims less precise across three model families, ten generations, and two prompt regimes. The models remove the numbers and the qualifiers that make a claim checkable, and they retain the hedges, so the remaining text reads as more tentative while the strongest causal sentence keeps its grade. This failure differs from the exaggeration reported for press releases, and it is harder to detect, because a reader can check an overstated claim against the source but a vague claim gives no quantity to check.
+Repeated summarization makes scientific claims less precise across three model families, ten generations, and two prompt regimes. This failure differs from the exaggeration reported for press releases, and it is harder to detect, because a reader can check an overstated claim against the source but a vague claim gives no quantity to check.
 
 Because $80\%$ of numeric loss occurs at the first hop, the intervention that matters is local: preserve the numbers and qualifiers through the transition from source document to first machine summary. Conservative prompting reduces numeric loss by $81\%$ at no additional computational cost, and its summaries stay shorter than the source on average. The models can retain this information when the prompt requires it, and they discard it by default. Instruments that anyone can repeat measure the epistemic properties of machine-summarized scientific text, and composing per-generation rates along a measured depth distribution estimates what readers receive.
 
-\textbf{Limitations.} Our chains are homogeneous, because one model summarizes its own output, while real pipelines mix models, humans, and formats. The released harness accepts any chain composition, so mixed chains are the next experiment. The three models are open weight at 3.8 to 7B parameters, so we cannot state how frontier proprietary models behave, and hedge use plausibly tracks instruction-tuning style. Rule-based instruments measure surface markers of epistemic stance and not the beliefs behind them. The entailment arm constrains that construct, but a reviewer can still read our effects as stylistic. We answer that readers calibrate on the style they receive, so a change in stance markers changes what a reader infers from the same evidence. The depth distribution treats citation hops as summarization events and comes from a branch-limited walk seeded by 60 abstracts, which makes the composition analysis the least certain quantitative claim in the paper. Abstracts are not full papers, so drift measured on abstracts can differ from drift on sections, and all 60 abstracts are biomedical, so fields with other hedging conventions can drift differently. The preregistered log-rank null comes from saturation and not from sample size, and 60 abstracts limit only the exploratory continuous test. Exact matching counts a rounded number as lost, so the numeric rates are floors, and the entailment arm rests on a single NLI model, corrected as described but never cross-checked against a second. The measured rates describe the 2026 systems we ran and require remeasurement on their successors.
+\textbf{Limitations.} Our chains are homogeneous, because one model summarizes its own output, while real pipelines mix models, humans, and formats. The three models are open weight at 3.8 to 7B parameters, so we cannot state how frontier proprietary models behave, and hedge use plausibly tracks instruction-tuning style. Rule-based instruments measure surface markers of epistemic stance and not the beliefs behind them. The entailment arm constrains that construct, and against a reading of our effects as merely stylistic we answer that readers calibrate on the style they receive, so a change in stance markers changes what a reader infers from the same evidence. The depth distribution treats citation hops as summarization events and comes from a branch-limited walk seeded by 60 abstracts, which makes the composition analysis the least certain quantitative claim in the paper. Abstracts are not full papers, so drift measured on abstracts can differ from drift on sections, and all 60 abstracts are biomedical, so fields with other hedging conventions can drift differently. The preregistered log-rank null comes from saturation and not from sample size, and 60 abstracts limit only the exploratory continuous test. Exact matching counts a rounded number as lost, so the numeric rates are floors, and the entailment arm rests on a single NLI model, corrected as described but never cross-checked against a second. The measured rates describe the 2026 systems we ran and require remeasurement on their successors.
 
 \section{Reproducibility}
 

@@ -19,6 +19,27 @@ import pathlib
 
 import matplotlib
 matplotlib.use("Agg")
+
+# NeurIPS text width is 5.5in. Each figure below is authored at close to its
+# printed width and included at 0.98\linewidth, so the scale factor is about
+# one and these point sizes are the sizes that reach the page. Authoring wide
+# and letting \includegraphics shrink it is what made the earlier figures
+# unreadable.
+COLUMN_IN = 5.4
+matplotlib.rcParams.update({
+    "font.size": 6.5,
+    "axes.titlesize": 7.0,
+    "axes.labelsize": 6.5,
+    "xtick.labelsize": 6.0,
+    "ytick.labelsize": 6.0,
+    "legend.fontsize": 5.8,
+    "lines.linewidth": 0.9,
+    "axes.linewidth": 0.6,
+    "xtick.major.width": 0.6,
+    "ytick.major.width": 0.6,
+    "xtick.major.size": 2.0,
+    "ytick.major.size": 2.0,
+})
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd
@@ -40,7 +61,7 @@ LABELS = {"hedge_density": "Hedge density (/100w)",
 def fig1(df, results, outdir):
     # Two rows of three so each panel is wide enough to read at column
     # width; the sixth cell carries the shared legend.
-    fig, axes = plt.subplots(2, 3, figsize=(11, 6.2))
+    fig, axes = plt.subplots(2, 3, figsize=(COLUMN_IN, 2.45))
     axes = axes.ravel()
     colors = {}
     for ax, marker in zip(axes[:5], MARKERS):
@@ -55,18 +76,11 @@ def fig1(df, results, outdir):
                         capsize=2, linewidth=1.2, color=colors[short],
                         label=f"{short}, {regime}")
         ax.set_xlabel("Generation")
-        ax.set_title(LABELS[marker].replace("/100w", "per 100 words"), fontsize=10)
-        est = next((r for r in results["H1_per_step_drift"].get("neutral", [])
-                    if r["marker"] == marker and r.get("estimate") is not None),
-                   None)
-        if est:
-            p = est["p_holm"]
-            ptxt = "p<1e-100" if p == 0 else ("p=%.2g" % p)
-            ax.annotate(f"neutral drift {est['estimate']:+.3f}/step, {ptxt}",
-                        xy=(0.03, 0.04), xycoords="axes fraction", fontsize=8)
+        ax.set_xticks(range(0, 11, 2))
+        ax.set_title(LABELS[marker].replace("/100w", "per 100 words"))
     handles, labels = axes[0].get_legend_handles_labels()
     axes[5].axis("off")
-    axes[5].legend(handles, labels, loc="center", fontsize=9, frameon=False,
+    axes[5].legend(handles, labels, loc="center", frameon=False,
                    title="solid: neutral, dashed: conservative")
     fig.tight_layout()
     fig.savefig(outdir / "fig1_trajectories.pdf", bbox_inches="tight")
@@ -78,8 +92,12 @@ def fig2(results, outdir):
     if surv.empty:
         print("[figures] no survival rows; skipping fig2")
         return
-    regimes = sorted(surv["regime"].unique())
-    fig, axes = plt.subplots(1, len(regimes), figsize=(6 * len(regimes), 4),
+    # Neutral first, matching Table 1's column order and the order the
+    # Results section discusses them in; alphabetical put conservative first.
+    _order = {"neutral": 0, "conservative": 1}
+    regimes = sorted(surv["regime"].unique(),
+                     key=lambda r: (_order.get(r, 99), r))
+    fig, axes = plt.subplots(1, len(regimes), figsize=(COLUMN_IN, 1.6),
                              squeeze=False)
     for ax, regime in zip(axes[0], regimes):
         sr = surv[surv["regime"] == regime]
@@ -89,6 +107,7 @@ def fig2(results, outdir):
             km.plot_survival_function(ax=ax, ci_show=True)
         ax.set_title(f"{regime} regime")
         ax.set_xlabel("Generation")
+        ax.set_xticks(range(0, 11, 2))
         ax.set_ylabel("P(core finding survives)")
         ax.set_ylim(0, 1.02)
     fig.tight_layout()
@@ -97,7 +116,7 @@ def fig2(results, outdir):
 
 
 def fig3(depths, composed, outdir):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(COLUMN_IN, 1.62))
     dw = {int(k): v for k, v in depths["depth_weights"].items()}
     ax1.bar(list(dw.keys()), list(dw.values()), color="steelblue")
     ax1.axvline(depths["median_depth"], color="k", linestyle=":",
@@ -116,10 +135,11 @@ def fig3(depths, composed, outdir):
     if depths["median_depth"]:
         ax2.axvline(depths["median_depth"], color="k", linestyle=":")
     ax2.set_xlabel("Citation depth (hops)")
-    ax2.set_ylabel("Measured retention (relative to source)")
+    ax2.set_xticks(range(0, 11, 2))
+    ax2.set_ylabel("Retention vs source")
     ax2.axhline(1.0, color="gray", linewidth=0.6)
     ax2.set_ylim(bottom=0)
-    ax2.legend(fontsize=8)
+    ax2.legend()
     fig.tight_layout()
     fig.savefig(outdir / "fig3_composition.pdf", bbox_inches="tight")
     plt.close(fig)
