@@ -182,6 +182,8 @@ def check_bindings():
         ("$-0.0590$ against $-0.0462$", pn["greedy_drift_on_sensitivity_subset"]["numeric_share_exact"]["estimate"], -0.0462),
         ("moves numeric fidelity from $0.48$", pn["trajectories_neutral"]["numeric_g4"], 0.48),
         ("from $0.48$ to $0.52$, about four points", pn["trajectories_neutral"]["numeric_g2"], 0.52),
+        ("about $1.6$ times as many words",
+         pn["word_counts"]["conservative_summary_mean"] / pn["word_counts"]["neutral_summary_mean"], 1.6),
         ("retains $62\\%$ of its original qualifiers", comp["markers"]["qualifier_share"]["retention_at_median_depth"], 0.62),
         ("whole depth distribution is $66\\%$", comp["markers"]["qualifier_share"]["expected_retention_at_consumption"], 0.66),
     ]
@@ -189,7 +191,7 @@ def check_bindings():
     for quote, truth, stated in binds:
         if quote not in TEX:
             out.append(f"  MISSING claim in paper.tex: {quote}")
-        elif abs(abs(truth) - abs(stated)) >= 0.006:
+        elif round(abs(truth), len(str(abs(stated)).split(".")[-1])) != abs(stated):
             out.append(f"  DRIFTED {quote!r}: paper says {stated}, data says {truth:.5f}")
     if not out:
         out.append(f"  {len(binds)} claim-to-value bindings verified")
