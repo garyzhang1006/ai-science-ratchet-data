@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[dblblindworkshop]{neurips_2026}
-\workshoptitle{AI for Scientific Knowledge (AISciK)}
+\workshoptitle{AI \& Science: Evolution or Extinction?}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
@@ -15,6 +15,13 @@
 \author{Anonymous Author(s)}
 
 \begin{document}
+
+% The CFP asks for the workshop notice on page 1. The style file builds
+% \@trackname from the dblblindworkshop option but only uses it in the
+% camera-ready branch, so a submission needs this override.
+\makeatletter
+\renewcommand{\@noticestring}{Submitted to the AISciK Workshop (NeurIPS 2026). Do not distribute.}
+\makeatother
 
 \maketitle
 
