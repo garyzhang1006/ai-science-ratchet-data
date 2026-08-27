@@ -1,9 +1,10 @@
-# Findings as of 2026-08-15
+# Findings, current as of the 2026-08-22 composition recompute
 
 All three hypotheses computed. 60 stratified PubMed open-access abstracts,
 three models (Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct,
 Mistral-7B-Instruct-v0.3), two prompt regimes, depth 10: 360 chains and 3600
-generations, none truncated, greedy decoding throughout.
+generations, greedy decoding throughout, with a generation budget of 1.5
+times the input length capped at 1024 tokens.
 
 ## H1: the drift is away from precision, not toward certainty
 
@@ -59,11 +60,15 @@ preregistered, and the preregistered test it supplements came out null.
 Class trajectories, neutral regime, generation 0 to 10: null 0.97 to 0.21,
 observational 0.95 to 0.37, randomized 0.94 to 0.32.
 
-## H3: conservative prompting damps every rate and flips no sign
+## H3: conservative prompting damps four of five rates and flips no sign
 
 Reduction in drift magnitude under conservative prompting: 79.7% for numeric
-fidelity, 76.9% for qualifier retention, 45.7% for hedge density. All
-interaction p < 1e-3, no sign flips, as H3 predicted.
+fidelity, 76.9% for qualifier retention, 58.9% for bidirectional
+entailment, and 45.7% for hedge density. Causal strength is the
+exception: it is null in both regimes and drifts slightly further under the
+conservative prompt (reduction share -91.7%, interaction p = 0.66).
+The other four interactions are significant, at p = 0.012 for hedge
+density and below 1e-26 for the remaining three. No marker flips sign.
 
 The effect on core-finding survival is larger than on any single marker. At
 generation 10 the core finding retains 0.726 support under conservative
@@ -90,13 +95,13 @@ same effect size and loses significance only because the subset holds 20
 abstracts rather than 60, which is a power difference and not a change in
 the estimate.
 
-## Composition against real intermediation depth
+## Composition against real citation depth
 
-An OpenAlex forward-citation walk over 30 seed works produced 2327
-consumption-weighted samples, giving a median intermediation depth of 2 hops
-and a p90 of 4. Composing measured neutral rates along that distribution, a
-claim at the median depth of two hops retains 87.4% of its qualifiers, the
-expectation over the whole depth distribution is 85.8%, and qualifier
+An OpenAlex forward-citation walk over 60 seed works produced 4920
+consumption-weighted samples, giving a median citation depth of 2 hops
+and a p90 of 3. Composing measured neutral rates along that distribution, a
+claim at the median depth of two hops retains 62.3% of its qualifiers, the
+expectation over the whole depth distribution is 66.5%, and qualifier
 retention stays above the 0.5 floor out to 10 hops. Hedge density rises
 rather than decays, so its per-step ratio exceeds 1.
 
