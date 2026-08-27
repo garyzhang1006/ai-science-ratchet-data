@@ -98,6 +98,8 @@ def cluster_drift(d: pd.DataFrame, col: str):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--release", default="release")
+    ap.add_argument("--out", default=None,
+                    help="output path; defaults to <release>/results/paper_numbers.json")
     args = ap.parse_args()
     release = pathlib.Path(args.release)
 
@@ -272,7 +274,9 @@ def main():
         "core_entail_g1": round(float(case.loc[1, "core_entail"]), 3),
     }
 
-    path = release / "results" / "paper_numbers.json"
+    path = (pathlib.Path(args.out) if args.out
+            else release / "results" / "paper_numbers.json")
+    path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         json.dump(out, f, indent=2)
     print(f"[paper_numbers] wrote {path}")

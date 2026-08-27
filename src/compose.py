@@ -50,6 +50,19 @@ def main():
     ap.add_argument("--threshold", type=float, default=0.5)
     args = ap.parse_args()
 
+    # Fail on a missing input with the command that produces it, rather than
+    # with a bare FileNotFoundError from three frames down.
+    produced_by = {
+        args.scores: "python -m src.score --chains 'data/chains_*.jsonl'",
+        args.depths: "python -m src.openalex_depth --mailto you@example.com",
+        args.results: "python -m src.analysis",
+    }
+    for path, cmd in produced_by.items():
+        if not pathlib.Path(path).exists():
+            raise SystemExit(
+                f"{path} is missing. Produce it with\n  {cmd}\n"
+                "or point the matching flag at the frozen copy under release/results/.")
+
     df = read_scores(args.scores)
     neutral = df[df["regime"] == "neutral"]
     depths = json.load(open(args.depths))

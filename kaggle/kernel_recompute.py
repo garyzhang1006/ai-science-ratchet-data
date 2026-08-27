@@ -10,7 +10,12 @@ import os
 import subprocess
 import sys
 
-REPO = "https://github.com/garyzhang1006/ai-science-ratchet-data"
+# Clone URL of the fork this kernel pulls its code and corpus from.
+# push_kernels.sh substitutes it, or set RATCHET_REPO before running.
+REPO = os.environ.get("RATCHET_REPO", "REPO_URL_PLACEHOLDER")
+if REPO == "REPO_URL_PLACEHOLDER":
+    raise SystemExit("Set RATCHET_REPO to your fork's clone URL, or let "
+                     "kaggle/push_kernels.sh substitute it.")
 W = "/kaggle/working"
 
 

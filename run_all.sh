@@ -24,5 +24,16 @@ python3 -m src.compose
 
 echo "== 6. figures =="
 python3 -m src.figures
-echo "Done. Numbers: results/results.json, results/composed.json;"
-echo "figures: figures/out/."
+
+echo "== 7. in-text numbers and positive controls =="
+python3 -m src.positive_control --abstracts release/abstracts.jsonl \
+    --out results/positive_control.json
+python3 -m src.paper_numbers --release release --out results/paper_numbers.json
+
+echo "== 8. tests =="
+python3 tests/test_instruments.py
+python3 tests/test_regressions.py
+python3 tests/test_release_consistency.py
+
+echo "Done. Numbers: results/results.json, results/composed.json,"
+echo "results/paper_numbers.json; figures: figures/out/."

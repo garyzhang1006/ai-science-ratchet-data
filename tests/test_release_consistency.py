@@ -68,3 +68,19 @@ def test_note_claims_no_universal_damping():
     damped = [k for k, v in h3.items() if v["reduction_share"] > 0]
     assert len(damped) == 4, damped
     assert "damps every rate" not in NOTE
+
+
+if __name__ == "__main__":
+    import sys
+    ok = True
+    for _name, _fn in sorted(globals().items()):
+        if _name.startswith("test_") and callable(_fn):
+            try:
+                _fn()
+                print(f"PASS {_name}")
+            except AssertionError as _e:
+                ok = False
+                print(f"FAIL {_name}: {_e}")
+    print()
+    print("ALL PASS" if ok else "FAILURES PRESENT")
+    sys.exit(0 if ok else 1)

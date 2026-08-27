@@ -15,6 +15,8 @@ markers, hypothesis tests, OpenAlex depth composition, figures.
 | 4. H1-H3 tests | `src/analysis.py` | laptop | ~1 min |
 | 5. OpenAlex depth + composition | `src/openalex_depth.py`, `src/compose.py` | laptop | ~20 min |
 | 6. Figures + Table 1 | `src/figures.py` | laptop | ~1 min |
+| 7. Every in-text number + positive controls | `src/paper_numbers.py`, `src/positive_control.py` | laptop | ~1 min |
+| 8. Tests | `tests/` | laptop | ~1 min |
 
 `bash run_all.sh` runs every CPU step and tells you when to insert the
 Kaggle step. `prereg/PREREGISTRATION.md` is the analysis lock; its git
