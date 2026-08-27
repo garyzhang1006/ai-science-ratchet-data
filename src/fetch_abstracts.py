@@ -101,9 +101,9 @@ def _null_tail(abstract: str) -> bool:
 
 def qualifies(cls: str, abstract: str) -> bool:
     """Mutually exclusive assignment with null-priority: an abstract whose
-    conclusion states a null result belongs to the null stratum no matter
+    conclusion states a null result belongs to the null class no matter
     which query surfaced it. Without this, fetch order silently absorbs
-    null-result RCTs into the rct stratum (first-query-wins bias)."""
+    null-result RCTs into the rct class (first-query-wins bias)."""
     if len(abstract.split()) < 150 or len(abstract.split()) > 450:
         return False
     if cls == "rct":
