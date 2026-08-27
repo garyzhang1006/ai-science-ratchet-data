@@ -33,13 +33,13 @@
       },
       {
         "marker": "numeric_share_exact",
-        "estimate": -0.05108604845446954,
-        "se": 0.006179732313685558,
-        "p_raw": 1.3770759658832798e-16,
-        "method": "ols_cluster",
+        "estimate": -0.05902875678780286,
+        "se": 0.008711788324291961,
+        "p_raw": 1.2377657798463036e-11,
+        "method": "mixedlm",
         "n_deltas": 480,
         "direction": "toward_certainty",
-        "p_holm": 5.508303863533119e-16,
+        "p_holm": 4.951063119385214e-11,
         "h1_verdict": "supported"
       },
       {

@@ -31,7 +31,12 @@ RE_CI = re.compile(
 # convention, not a study statistic, and must not count as retained.
 RE_PERCENT = re.compile(
     r"([-+−]?\d+(?:\.\d+)?)\s*%(?!\s*(?:CI\b|confidence))", re.IGNORECASE)
-RE_ANY_NUM = re.compile(r"[-+−]?\d+(?:\.\d+)?")
+# The sign must not follow a digit or a decimal point. Without the
+# lookbehind, the hyphen separating a confidence interval's bounds
+# ("0.544-0.866", the standard PubMed format) is read as a minus sign,
+# so the upper bound becomes -0.866 and can never match the correctly
+# signed value the source-side RE_CI pattern extracted.
+RE_ANY_NUM = re.compile(r"(?<![\d.])[-+−]?\d+(?:\.\d+)?")
 
 
 def _to_float(s: str):

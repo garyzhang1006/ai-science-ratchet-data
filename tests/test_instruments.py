@@ -57,6 +57,31 @@ check("numeric rounded", nf2["retained_rounded"], 1)
 nf3 = numeric_fidelity("No numbers here at all.", "Still none.")
 check("numeric none -> None", nf3["share_exact"], None)
 
+# A text scored against itself must retain all of its own statistics. The
+# qualifier instrument has always had this check; the numeric one did not,
+# which let a CI-hyphen parsing bug sit undetected in the released scores.
+nf_self_src = ("The hazard ratio was 0.69 (95% CI 0.544-0.866) in the treated "
+               "arm, and the rate ratio was 1.35 (95% CI 1.22-1.52).")
+check_approx("numeric self-retention", numeric_fidelity(nf_self_src, nf_self_src)["share_exact"], 1.0)
+
+# The same bound written with an en dash or the word "to" must score the same.
+for sep in ("-", "\u2013", " to "):
+    t = f"The odds ratio was 0.75 (95% CI 0.61{sep}0.92)."
+    check_approx(f"numeric self-retention, separator {sep!r}",
+                 numeric_fidelity(t, t)["share_exact"], 1.0)
+
+# Corpus-level gate: the instrument must not lose more than a few percent of
+# the corpus's own statistics to itself.
+import json, pathlib as _pl
+_corpus = _pl.Path(__file__).resolve().parents[1] / "corpus" / "abstracts.jsonl"
+if _corpus.exists():
+    _shares = [numeric_fidelity(r["abstract"], r["abstract"])["share_exact"]
+               for r in (json.loads(l) for l in open(_corpus))]
+    _shares = [x for x in _shares if x is not None]
+    _mean = sum(_shares) / len(_shares)
+    check("numeric corpus self-retention >= 0.97", _mean >= 0.97, True)
+    print(f"     corpus mean self-retention = {_mean:.4f} over {len(_shares)} abstracts")
+
 # --- qualifiers ---
 src = ("In postmenopausal women, 50 mg/day of the drug was tested in a "
        "randomized double-blind placebo-controlled trial.")
