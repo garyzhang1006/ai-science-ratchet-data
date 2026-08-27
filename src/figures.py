@@ -4,7 +4,7 @@ fig1  five panels, marker vs generation 0-10, one line per model x regime,
       per-step fixed effects inset from results.json
 fig2  Kaplan-Meier survival of the core finding, by claim class, one panel
       per regime
-fig3  left: intermediation-depth distribution; right: composed expected
+fig3  left: citation-depth distribution; right: composed expected
       retention vs depth with policy threshold line
 table1  LaTeX per-step fixed effects table
 
@@ -103,7 +103,7 @@ def fig3(depths, composed, outdir):
     ax1.axvline(depths["median_depth"], color="k", linestyle=":",
                 label=f"median = {depths['median_depth']}")
     ax1.set_xticks(sorted(dw))
-    ax1.set_xlabel("Intermediation depth (hops)")
+    ax1.set_xlabel("Citation depth (hops)")
     ax1.set_ylabel("Consumption weight")
     ax1.legend()
 
@@ -115,7 +115,7 @@ def fig3(depths, composed, outdir):
                 label=f"calibration floor {composed['threshold']}")
     if depths["median_depth"]:
         ax2.axvline(depths["median_depth"], color="k", linestyle=":")
-    ax2.set_xlabel("Depth (hops)")
+    ax2.set_xlabel("Citation depth (hops)")
     ax2.set_ylabel("Measured retention (relative to source)")
     ax2.axhline(1.0, color="gray", linewidth=0.6)
     ax2.set_ylim(bottom=0)

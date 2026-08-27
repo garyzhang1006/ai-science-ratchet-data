@@ -1,4 +1,4 @@
-"""Estimate the depth distribution of scholarly intermediation from
+"""Estimate the citation-depth distribution of scholarly reuse from
 OpenAlex citation paths.
 
 Estimator (documented for the paper's Appendix): starting from each source
@@ -6,7 +6,7 @@ article (matched by PMID), walk the citation graph FORWARD (works citing
 the current node) for up to --max-depth hops, sampling at most
 --branch citing works per node, preferring reviews (OpenAlex
 type "review" or title containing "review"/"meta-analysis") as
-intermediation hops. Each sampled endpoint contributes its citation count
+citation hops. Each sampled endpoint contributes its citation count
 as a consumption weight at its path depth. The resulting weighted depth
 histogram approximates how many summarization-like hops separate a primary
 claim from its typical point of consumption. Assumption, stated in the
@@ -89,7 +89,7 @@ def walk(seed_work, mailto, max_depth, branch, rng):
         for w in new:
             seen.add(w["id"])
             samples.append((depth + 1, 1 + w.get("cited_by_count", 0)))
-        # recurse through review-like citers first (intermediation hops)
+        # recurse through review-like citers first (citation hops)
         reviews = [w for w in new if is_reviewlike(w)]
         others = [w for w in new if not is_reviewlike(w)]
         rng.shuffle(reviews)
