@@ -1,0 +1,72 @@
+{
+ "n_confirmatory": 17,
+ "n_exploratory": 13,
+ "n_exploratory_surviving_family_holm": 9,
+ "exploratory": [
+  {
+   "name": "H2 continuous full chain",
+   "p_raw": 0.0086,
+   "p_holm_family": 0.043
+  },
+  {
+   "name": "H2 continuous after hop 1",
+   "p_raw": 0.041,
+   "p_holm_family": 0.164
+  },
+  {
+   "name": "hedge count raw",
+   "p_raw": 0.254,
+   "p_holm_family": 0.508
+  },
+  {
+   "name": "hedge density controlling words",
+   "p_raw": 0.000153,
+   "p_holm_family": 0.001224
+  },
+  {
+   "name": "hedges per sentence",
+   "p_raw": 6.74e-09,
+   "p_holm_family": 7.414e-08
+  },
+  {
+   "name": "epistemic-hedge subset",
+   "p_raw": 1e-05,
+   "p_holm_family": 9e-05
+  },
+  {
+   "name": "per-model hedge density Qwen2.5-7B-Instruct",
+   "p_raw": 0.000402,
+   "p_holm_family": 0.002412
+  },
+  {
+   "name": "per-model hedge density Phi-3.5-mini-instruct",
+   "p_raw": 3.09e-06,
+   "p_holm_family": 3.09e-05
+  },
+  {
+   "name": "per-model hedge density Mistral-7B-Instruct-v0.3",
+   "p_raw": 0.000196,
+   "p_holm_family": 0.001372
+  },
+  {
+   "name": "temperature arm hedge_density",
+   "p_raw": 0.09091291602468018,
+   "p_holm_family": 0.2727387480740405
+  },
+  {
+   "name": "temperature arm causal_strength",
+   "p_raw": 0.8580531073203612,
+   "p_holm_family": 0.8580531073203612
+  },
+  {
+   "name": "temperature arm numeric_share_exact",
+   "p_raw": 2.035620299529377e-11,
+   "p_holm_family": 2.4427443594352525e-10
+  },
+  {
+   "name": "temperature arm qualifier_share",
+   "p_raw": 1.9106315487773925e-17,
+   "p_holm_family": 2.48382101341061e-16
+  }
+ ]
+}

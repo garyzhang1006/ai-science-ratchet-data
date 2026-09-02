@@ -1,0 +1,32 @@
+{
+ "n_scored_main": 3600,
+ "n_sources": 60,
+ "n_chains": 360,
+ "icc": {
+  "hedge_density": {
+   "levels": 0.3483121617198222,
+   "differences": 0.010981152094819464
+  },
+  "numeric_share_exact": {
+   "levels": 0.5751341477033736,
+   "differences": 0.020698709658822107
+  },
+  "qualifier_share": {
+   "levels": 0.488682603452512,
+   "differences": 0.023273502653623913
+  },
+  "bi_entail": {
+   "levels": 0.2702214162986816,
+   "differences": 0.004757112966225907
+  }
+ },
+ "crosscheck_rows": 4200,
+ "crosscheck_fwd_entail_nonnull": 4200,
+ "sensitivity_rows": 660,
+ "sensitivity_fwd_entail_nonnull": 0,
+ "primary_fwd_entail_nonnull_main": 3960,
+ "crosscheck_by_arm": {
+  "main": 3600,
+  "sens": 600
+ }
+}

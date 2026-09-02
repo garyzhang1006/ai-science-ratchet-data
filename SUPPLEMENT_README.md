@@ -1,0 +1,1 @@
+Anonymized code-and-data supplement. Repository URLs inside the Kaggle kernel scripts were replaced with ANONYMIZED for double-blind review and will be restored on acceptance. Every number in the paper is recomputed by `python -m src.analysis`, `python -m src.compose`, and `python -m src.paper_numbers --release release`.

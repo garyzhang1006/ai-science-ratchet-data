@@ -1,0 +1,22 @@
+{
+ "n_with_source_statistic": 3120,
+ "high_numeric_threshold": 0.8,
+ "low_entail_threshold": 0.5,
+ "n_high_numeric": 1806,
+ "n_discordant": 211,
+ "discordant_share": 0.1168327796234773,
+ "by_regime": {
+  "neutral": {
+   "n_high_numeric": 471,
+   "n_discordant": 132,
+   "share": 0.2802547770700637
+  },
+  "conservative": {
+   "n_high_numeric": 1335,
+   "n_discordant": 79,
+   "share": 0.05917602996254682
+  }
+ },
+ "pearson_numeric_vs_fwd_entail": 0.5144618539862867,
+ "adjudication_sample_rows": 30
+}

@@ -11,3 +11,5 @@ SCAN_LEDGER.md
 /figures/
 .ratchet-release
 ste.py
+kaggle/crosscheck_out/
+*.log

@@ -1,0 +1,16 @@
+{
+ "n_sources": 60,
+ "source_causal_distribution": {
+  "1": 3,
+  "2": 32,
+  "3": 3,
+  "4": 2,
+  "5": 20
+ },
+ "share_at_ceiling": 0.3333333333333333,
+ "share_at_four_or_above": 0.36666666666666664,
+ "per_gen_upper_bound": 0.04043323433764443,
+ "ten_generation_upper_bound": 0.4043323433764443,
+ "positive_control_shift": 1.1666666666666665,
+ "bound_as_share_of_positive_control": 0.3465705800369523
+}

@@ -17,7 +17,7 @@ import sys
 # Clone URL of the fork this kernel pulls its code and corpus from.
 # push_kernels.sh substitutes it, or set RATCHET_REPO before running.
 REPO = os.environ.get("RATCHET_REPO", "REPO_URL_PLACEHOLDER")
-if REPO == "REPO_URL_PLACEHOLDER":
+if not REPO.startswith(("http://", "https://", "git@")):
     raise SystemExit("Set RATCHET_REPO to your fork's clone URL, or let "
                      "kaggle/push_kernels.sh substitute it.")
 MODELS = [

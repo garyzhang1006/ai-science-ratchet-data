@@ -1,0 +1,56 @@
+{
+  "cross_model": "roberta-large-mnli",
+  "primary_model": "cross-encoder/nli-deberta-v3-base",
+  "self_entailment_mean": 0.9891682942708333,
+  "self_entailment_gate_passed": true,
+  "n_generations": 4200,
+  "n_paired": 4200,
+  "n_paired_main_arm": 3600,
+  "agreement": {
+    "fwd_entail": {
+      "n": 3600,
+      "pearson_r": 0.9091635185806552,
+      "spearman_rho": 0.9238101057528446,
+      "mean_primary": 0.6584749966216894,
+      "mean_crosscheck": 0.7007739185530847
+    },
+    "bwd_entail": {
+      "n": 3600,
+      "pearson_r": 0.9542900411315249,
+      "spearman_rho": 0.9530144025772006,
+      "mean_primary": 0.5481994199371503,
+      "mean_crosscheck": 0.6073855018951481
+    },
+    "bi_entail": {
+      "n": 3600,
+      "pearson_r": 0.9544576856391814,
+      "spearman_rho": 0.9555968316504704,
+      "mean_primary": 0.5134506934081804,
+      "mean_crosscheck": 0.575053019194797
+    },
+    "core_entail": {
+      "n": 3600,
+      "pearson_r": 0.8072243351730157,
+      "spearman_rho": 0.8115588588805013,
+      "mean_primary": 0.5399285517187301,
+      "mean_crosscheck": 0.6149394753244188
+    }
+  },
+  "fwd_entail_endpoints_primary": {
+    "neutral_g1": 0.6487737226635082,
+    "neutral_g10": 0.48609869850550774,
+    "conservative_g1": 0.838036367519132,
+    "conservative_g10": 0.7798105562734503
+  },
+  "fwd_entail_endpoints_crosscheck": {
+    "neutral_g1": 0.7058378343415956,
+    "neutral_g10": 0.5275928802105088,
+    "conservative_g1": 0.8592590570430197,
+    "conservative_g10": 0.8160442043812196
+  },
+  "regime_gap_g10_primary": 0.29371185776794256,
+  "regime_gap_g10_crosscheck": 0.28845132417071084,
+  "neutral_minus_conservative_drop_primary": 0.10444921291231873,
+  "neutral_minus_conservative_drop_crosscheck": 0.13503010146928673,
+  "regime_contrast_sign_reproduced": true
+}
